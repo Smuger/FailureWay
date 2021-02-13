@@ -2,10 +2,12 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import colors from "colors";
 import users from "./data/users.js";
+import services from "./data/services.js";
 import products from "./data/products.js";
 import User from "./models/userModel.js";
 import Product from "./models/productModel.js";
 import Order from "./models/orderModel.js";
+import Service from "./models/serviceModel.js";
 import connectDB from "./config/db.js";
 
 dotenv.config();
@@ -14,19 +16,24 @@ connectDB();
 
 const importData = async () => {
   try {
-    await Order.deleteMany();
-    await Product.deleteMany();
+    //await Order.deleteMany();
+    //await Product.deleteMany();
     await User.deleteMany();
+    await Service.deleteMany();
 
     const createdUser = await User.insertMany(users);
 
     const adminUser = createdUser[0]._id;
 
-    const sampleProducts = products.map((product) => {
-      return { ...product, user: adminUser };
+    // const sampleProducts = products.map((product) => {
+    //   return { ...product, user: adminUser };
+    // });
+    const sampleServices = services.map((service) => {
+      return { ...service, user: adminUser };
     });
 
-    await Product.insertMany(sampleProducts);
+    //await Product.insertMany(sampleProducts);
+    await Service.insertMany(sampleServices);
 
     console.log("Data imported!".green.inverse);
     process.exit();

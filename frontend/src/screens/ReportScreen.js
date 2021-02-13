@@ -15,65 +15,78 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import FormContainer from "../components/FormContainer";
-import { register } from "../actions/userActions";
+import { createServiceReview, listServices } from "../actions/serviceActions";
 
 const ReportScreen = ({ location, history }) => {
-  const [service, setService] = useState("");
-  const [comment, setComment] = useState("");
-  const [severity, setSeverity] = useState([1, 3]);
+  // TODO: Replace this with services from DB
+  //const services = ["Service A", "Service B", "Service C"];
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState(null);
+  const [servicePicked, setServicePicked] = useState("");
+  const [severity, setSeverity] = useState(0);
+  const [downtime, setDowntime] = useState(1);
+  const [minor, setMinor] = useState(0);
+  const [major, setMajor] = useState(0);
+  const [comment, setComment] = useState("");
+  const [allServicesNames, setAllServicesNames] = useState([]);
+
+  const [message, setMessage] = useState("");
 
   const dispatch = useDispatch();
 
-  const userRegister = useSelector((state) => state.userRegister);
+  const serviceList = useSelector((state) => state.serviceList);
 
-  const { loading, error, userInfo } = userRegister;
+  const { loading, error, services } = serviceList;
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
   useEffect(() => {
-    if (userInfo) {
-      history.push(redirect);
-    }
-  }, [userInfo, redirect, history]);
+    dispatch(listServices());
+  }, [dispatch, location, history]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      setMessage("Passwords do not match");
+
+    console.log(
+      "FORM: " + servicePicked + "|" + severity + "|" + downtime + "|" + comment
+    );
+    console.log("OBJECT" + JSON.stringify(severity));
+
+    // Turn on after testing
+    if (servicePicked === "") {
+      dispatch(
+        createServiceReview(services[0]._id, { severity, downtime, comment })
+      );
+    } else {
+      dispatch(
+        createServiceReview(servicePicked, { severity, downtime, comment })
+      );
     }
-    dispatch(register(name, email, password));
   };
 
   return (
     <FormContainer>
       <h1>Report issue</h1>
-      {message && <Message variant="danger">{message}</Message>}
+      {message && <Message variant="info">{message}</Message>}
       {error && <Message variant="danger">{error}</Message>}
       <Form onSubmit={submitHandler}>
-        <Form.Group controlId="name">
+        {/* CHOOSE SERVICE */}
+        <Form.Group controlId="service">
           <Form.Label>Service</Form.Label>
-          <ListGroup.Item>
-            <Form.Control
-              as="select"
-              value={service}
-              onChange={(e) => setService(e.target.value)}
-            >
-              {["Service A", "Service B", "Service C"].map((x) => (
-                <option key={x + 1} value={x + 1}>
-                  {x + 1}
-                </option>
-              ))}
-            </Form.Control>
-          </ListGroup.Item>
+          <Form.Control
+            as="select"
+            value={servicePicked}
+            onChange={(e) => setServicePicked(e.target.value)}
+          >
+            {services.map((service) => (
+              <option key={service._id} value={service._id}>
+                {service.name}
+              </option>
+            ))}
+          </Form.Control>
         </Form.Group>
 
-        <Form.Group controlId="name">
+        {/* CHOOSE SEVERITY RADIO CHECK */}
+        <Form.Group controlId="severity">
           <Row>
             <Form.Label>Severity</Form.Label>
           </Row>
@@ -81,32 +94,43 @@ const ReportScreen = ({ location, history }) => {
             <ToggleButtonGroup
               type="radio"
               name="options"
-              defaultValue={1}
-              onChange={(e, selected) => setPassword(selected)}
+              defaultValue={0}
+              onChange={(selected) => setSeverity(selected)}
             >
-              <ToggleButton value={1}>Minor issues</ToggleButton>
-              <ToggleButton value={2}>Major issues</ToggleButton>
+              <ToggleButton value={0}>Minor issues</ToggleButton>
+              <ToggleButton value={1}>Major issues</ToggleButton>
             </ToggleButtonGroup>
           </Row>
         </Form.Group>
 
-        <Form.Group controlId="confirmPassword">
-          <Form.Label>Downtime</Form.Label>
-          <ButtonToolbar aria-label="Toolbar with button groups">
-            <ButtonGroup className="mr-2" aria-label="First group">
-              <Button>1h</Button> <Button>2h</Button> <Button>3h</Button>{" "}
-              <Button>4h</Button>
-            </ButtonGroup>
-            <ButtonGroup className="mr-2" aria-label="Second group">
-              <Button>5h</Button> <Button>6h</Button> <Button>7h</Button>
-            </ButtonGroup>
-            <ButtonGroup aria-label="Third group">
-              <Button>Day</Button>
-            </ButtonGroup>
-          </ButtonToolbar>
+        {/* CHOOSE DOWNTIME RADIO CHECK */}
+        <Form.Group controlId="downtime">
+          <Row>
+            <Form.Label>Downtime</Form.Label>
+          </Row>
+          <Row>
+            <ToggleButtonGroup
+              type="radio"
+              name="options"
+              defaultValue={1}
+              rows={3}
+              style={{ flexWrap: "wrap" }}
+              onChange={(selected) => setDowntime(selected)}
+            >
+              <ToggleButton value={1}>1h</ToggleButton>
+              <ToggleButton value={2}>2h</ToggleButton>
+              <ToggleButton value={3}>3h</ToggleButton>
+              <ToggleButton value={4}>4h</ToggleButton>
+              <ToggleButton value={5}>5h</ToggleButton>
+              <ToggleButton value={6}>6h</ToggleButton>
+              <ToggleButton value={7}>7h</ToggleButton>
+              <ToggleButton value={8}>Day</ToggleButton>
+            </ToggleButtonGroup>
+          </Row>
         </Form.Group>
 
-        <Form.Group controlId="confirmPassword">
+        {/* COMMENT */}
+        <Form.Group controlId="comment">
           <Form.Label>Comment</Form.Label>
           <Form.Control
             placeholder="Describe how this downtime affected you"
