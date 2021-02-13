@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import FormContainer from "../components/FormContainer";
-import { createServiceReview, listServices } from "../actions/serviceActions";
+import { createServiceReport, listServices } from "../actions/serviceActions";
 
 const ReportScreen = ({ location, history }) => {
   // TODO: Replace this with services from DB
@@ -54,11 +54,11 @@ const ReportScreen = ({ location, history }) => {
     // Turn on after testing
     if (servicePicked === "") {
       dispatch(
-        createServiceReview(services[0]._id, { severity, downtime, comment })
+        createServiceReport(services[0]._id, { severity, downtime, comment })
       );
     } else {
       dispatch(
-        createServiceReview(servicePicked, { severity, downtime, comment })
+        createServiceReport(servicePicked, { severity, downtime, comment })
       );
     }
     history.push(redirect);

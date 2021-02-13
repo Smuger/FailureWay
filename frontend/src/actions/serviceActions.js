@@ -52,7 +52,7 @@ export const listServiceDetails = (id) => async (dispatch) => {
   }
 };
 
-export const createServiceReview = (serviceId, report) => async (
+export const createServiceReport = (serviceId, report) => async (
   dispatch,
   getState
 ) => {

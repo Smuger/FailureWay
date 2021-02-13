@@ -75,7 +75,7 @@ const ProfileScreen = ({ location, history }) => {
           </Form.Group>
 
           <Form.Group controlId="password">
-            <Form.Label>Password</Form.Label>
+            <Form.Label>Change Password</Form.Label>
             <Form.Control
               type="password"
               placeholder="Enter password"
@@ -85,7 +85,7 @@ const ProfileScreen = ({ location, history }) => {
           </Form.Group>
 
           <Form.Group controlId="confirmPassword">
-            <Form.Label>Confirm Password</Form.Label>
+            <Form.Label>Confirm New Password</Form.Label>
             <Form.Control
               type="password"
               placeholder="Confirm password"
@@ -99,7 +99,7 @@ const ProfileScreen = ({ location, history }) => {
           </Button>
         </Form>
       </Col>
-      <Col md={9}>My Orders</Col>
+      <Col md={9}>Reported issues:</Col>
     </Row>
   );
 };

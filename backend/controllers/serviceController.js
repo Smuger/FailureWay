@@ -28,58 +28,65 @@ const getServiceById = asyncHandler(async (req, res) => {
 const updateServiceDowntime = asyncHandler(async (req, res) => {
   let newMinor = 0;
   let newMajor = 0;
+  let dayNumber = 0;
+
+  let weekday = new Array(7);
+  weekday[0] = "Sunday";
+  weekday[1] = "Monday";
+  weekday[2] = "Tuesday";
+  weekday[3] = "Wednesday";
+  weekday[4] = "Thursday";
+  weekday[5] = "Friday";
+  weekday[6] = "Saturday";
+
+  let day = new Date();
+  let dayOfTheWeek = weekday[day.getDay()];
 
   const { severity, downtime, comment } = req.body;
 
   const service = await Service.findById(req.params.id);
 
-  console.log("data length: " + service.data.length);
-
-  console.log("Downtime: " + downtime);
-  console.log("Database Minor: " + service.data[0].minor);
-  console.log("database Major: " + service.data[0].major);
-  service.data[0].minor;
-
   if (service) {
-    if (service.data.length > 0) {
-      // TODO: Check day
+    let sameDay = false;
 
+    for (let i = 0; i < service.data.length; i++) {
+      if (service.data[i].name === dayOfTheWeek) {
+        dayNumber = i;
+        sameDay = true;
+      }
+    }
+
+    if (sameDay) {
       switch (severity) {
         case 0:
-          newMinor = service.data[0].minor + downtime;
-          newMajor = service.data[0].major;
-          console.log("data over 0 newMinor: " + newMinor);
+          newMinor = service.data[dayNumber].minor + downtime;
+          newMajor = service.data[dayNumber].major;
           break;
         case 1:
-          newMajor = service.data[0].major + downtime;
-          newMinor = service.data[0].minor;
-          console.log("data over 0 newMajor: " + newMajor);
+          newMajor = service.data[dayNumber].major + downtime;
+          newMinor = service.data[dayNumber].minor;
           break;
       }
-      service.data.shift();
     } else {
       switch (severity) {
         case 0:
           newMinor = downtime;
-          console.log("data under 0 newMinor: " + newMinor);
           break;
 
         case 1:
           newMajor = downtime;
-          console.log("data under 0 newMajor: " + newMajor);
           break;
       }
     }
 
+    service.data.splice(dayNumber, 1);
+
     const monday = {
-      name: req.user.name,
+      name: dayOfTheWeek,
       minor: newMinor,
       major: newMajor,
       user: req.user._id,
     };
-
-    console.log("newMinor: " + newMinor);
-    console.log("newMajor: " + newMajor);
 
     service.data.push(monday);
 
