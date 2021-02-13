@@ -8,7 +8,7 @@ import Loader from "../components/Loader";
 //import { listProducts } from "../actions/productActions";
 import { listServices } from "../actions/serviceActions";
 
-const HomeScreen = () => {
+const HomeScreen = ({ history }) => {
   const dispatch = useDispatch();
 
   //const productList = useSelector((state) => state.productList);
@@ -17,12 +17,21 @@ const HomeScreen = () => {
   console.log("LOOK AT" + serviceList);
   const { loading, error, services } = serviceList;
 
+  const userLogin = useSelector((state) => state.userLogin);
+
+  const { userInfo } = userLogin;
+
+  const redirect = "/login";
+
   // useEffect(() => {
   //   dispatch(listProducts());
   // }, [dispatch]);
 
   useEffect(() => {
     dispatch(listServices());
+    if (userInfo === null) {
+      history.push(redirect);
+    }
   }, [dispatch]);
 
   return (
