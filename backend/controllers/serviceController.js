@@ -33,6 +33,13 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
 
   const service = await Service.findById(req.params.id);
 
+  console.log("data length: " + service.data.length);
+
+  console.log("Downtime: " + downtime);
+  console.log("Database Minor: " + service.data[0].minor);
+  console.log("database Major: " + service.data[0].major);
+  service.data[0].minor;
+
   if (service) {
     if (service.data.length > 0) {
       // TODO: Check day
@@ -40,11 +47,13 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
       switch (severity) {
         case 0:
           newMinor = service.data[0].minor + downtime;
-
+          newMajor = service.data[0].major;
+          console.log("data over 0 newMinor: " + newMinor);
           break;
         case 1:
           newMajor = service.data[0].major + downtime;
-
+          newMinor = service.data[0].minor;
+          console.log("data over 0 newMajor: " + newMajor);
           break;
       }
       service.data.shift();
@@ -52,12 +61,12 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
       switch (severity) {
         case 0:
           newMinor = downtime;
-
+          console.log("data under 0 newMinor: " + newMinor);
           break;
 
         case 1:
           newMajor = downtime;
-
+          console.log("data under 0 newMajor: " + newMajor);
           break;
       }
     }
@@ -68,6 +77,9 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
       major: newMajor,
       user: req.user._id,
     };
+
+    console.log("newMinor: " + newMinor);
+    console.log("newMajor: " + newMajor);
 
     service.data.push(monday);
 

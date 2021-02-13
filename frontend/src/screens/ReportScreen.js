@@ -61,6 +61,7 @@ const ReportScreen = ({ location, history }) => {
         createServiceReview(servicePicked, { severity, downtime, comment })
       );
     }
+    history.push(redirect);
   };
 
   return (
