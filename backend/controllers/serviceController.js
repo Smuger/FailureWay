@@ -1,5 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Service from "../models/serviceModel.js";
+import path from "path";
+import fs from "fs";
 
 // @desc    Fetch all services
 // @route   GET /api/services
@@ -42,11 +44,34 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
   let day = new Date();
   let dayOfTheWeek = weekday[day.getDay()];
 
-  const { severity, downtime, comment } = req.body;
+  const { severity, downtime, comment, image } = req.body;
 
+  // const imagedata = fs.readFileSync(path.join(__dirname + image), {
+  //   encoding: "base64",
+  // });
   const service = await Service.findById(req.params.id);
+  console.log("Service to update found: ");
 
+  // Check if report with image
+  if (image) {
+    console.log("Image found");
+    // Get current directory
+    const __dirname = path.resolve();
+
+    // get file that was uploaded before
+    var imagedata = fs.readFileSync(path.join(__dirname + image));
+
+    imagedata = JSON.parse(JSON.stringify(imagedata));
+
+    imagedata = imagedata.data;
+
+    // get the image extention
+    var imageExt = "image/" + image.split(".")[1];
+  }
+
+  // Check is service was found, update weekly data accordingly
   if (service) {
+    console.log("Working on service");
     let sameDay = false;
 
     for (let i = 0; i < service.data.length; i++) {
@@ -78,19 +103,77 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
           break;
       }
     }
+    console.log("Weekly summary data was edited succesfuly");
 
+    // remove previous weekly data
     service.data.splice(dayNumber, 1);
 
-    const monday = {
+    console.log("New weekly summary equals");
+    console.log("dayOfTheWeek: " + dayOfTheWeek);
+    console.log("newMinor: " + newMinor);
+    console.log("newMajor: " + newMajor);
+    console.log("req.user._id: " + req.user._id);
+
+    const newData = {
       name: dayOfTheWeek,
-      minor: newMinor,
-      major: newMajor,
+      minor: Number(newMinor),
+      major: Number(newMajor),
       user: req.user._id,
     };
 
-    service.data.push(monday);
+    if (image) {
+      console.log("req.user._id: " + req.user._id);
+      console.log("severity: " + severity);
+      console.log("downtime: " + downtime);
+      console.log("comment: " + comment);
+      console.log("image: " + image);
+      console.log("imagedata: " + imagedata);
+      console.log("imageExt: " + imageExt);
 
-    await service.save();
+      var newReport = {
+        user: req.user._id,
+        severity: Number(severity),
+        downtime: Number(downtime),
+        comment: comment,
+        desc: image,
+        img: {
+          data: imagedata,
+          contentType: imageExt,
+        },
+      };
+    } else {
+      console.log("req.user._id: " + req.user._id);
+      console.log("severity: " + severity);
+      console.log("downtime: " + downtime);
+      console.log("comment: " + comment);
+
+      var newReport = {
+        user: req.user._id,
+        severity: Number(severity),
+        downtime: Number(downtime),
+        comment: comment,
+      };
+    }
+    console.log("newData: " + JSON.stringify(newData));
+
+    service.data.push(newData);
+    console.log("service.data: " + service.data);
+    console.log("newReport: " + JSON.stringify(newReport).toString());
+
+    service.report.push(newReport);
+
+    console.log("Service 1 test: " + service.report[1]);
+    let serviceReportLastPosition = service.report.length - 1;
+
+    console.log("EVERYTHING IS DONE");
+
+    try {
+      await service.save();
+    } catch (error) {
+      console.error("Service failed while saving: " + error);
+    }
+
+    console.log("Failed to save?");
     res.status(201).json({ message: "Service added" });
   } else {
     res.status(404);

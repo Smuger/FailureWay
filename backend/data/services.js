@@ -1,27 +1,33 @@
 const service = [
   {
-    name: "Service A",
-    provider: "Provider A",
+    name: "Collaborate - Live Chat",
+    provider: "Blackboard Inc.",
+    data: [{ name: "Monday", minor: 5, major: 3 }],
   },
   {
-    name: "Service B",
-    provider: "Provider A",
+    name: "Collaborate - Video Stream",
+    provider: "Blackboard Inc.",
+    data: [{ name: "Monday", minor: 1, major: 2 }],
   },
   {
-    name: "Service C",
-    provider: "Provider A",
+    name: "Collaborate - File Upload",
+    provider: "Blackboard Inc.",
+    data: [{ name: "Monday", minor: 1, major: 0 }],
   },
   {
-    name: "Service A",
-    provider: "Provider B",
+    name: "Office PC",
+    provider: "Brunel University London",
+    data: [{ name: "Monday", minor: 0, major: 1 }],
   },
   {
-    name: "Service B",
-    provider: "Provider B",
+    name: "Timetable",
+    provider: "Brunel University London",
+    data: [{ name: "Monday", minor: 1, major: 6 }],
   },
   {
-    name: "Service A",
-    provider: "Provider C",
+    name: "Email",
+    provider: "Brunel University London",
+    data: [{ name: "Monday", minor: 10, major: 2 }],
   },
 ];
 

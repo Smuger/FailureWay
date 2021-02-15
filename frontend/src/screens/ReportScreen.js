@@ -16,6 +16,7 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import FormContainer from "../components/FormContainer";
 import { createServiceReport, listServices } from "../actions/serviceActions";
+import axios from "axios";
 
 const ReportScreen = ({ location, history }) => {
   // TODO: Replace this with services from DB
@@ -28,6 +29,8 @@ const ReportScreen = ({ location, history }) => {
   const [major, setMajor] = useState(0);
   const [comment, setComment] = useState("");
   const [allServicesNames, setAllServicesNames] = useState([]);
+  const [image, setImage] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   const [message, setMessage] = useState("");
 
@@ -43,22 +46,62 @@ const ReportScreen = ({ location, history }) => {
     dispatch(listServices());
   }, [dispatch, location, history]);
 
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+      const { data } = await axios.post("/api/upload", formData, config);
+
+      setImage(data);
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+    }
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
 
     console.log(
-      "FORM: " + servicePicked + "|" + severity + "|" + downtime + "|" + comment
+      "FORM: " +
+        servicePicked +
+        "|" +
+        severity +
+        "|" +
+        downtime +
+        "|" +
+        comment +
+        "|" +
+        image
     );
-    console.log("OBJECT" + JSON.stringify(severity));
 
     // Turn on after testing
     if (servicePicked === "") {
       dispatch(
-        createServiceReport(services[0]._id, { severity, downtime, comment })
+        createServiceReport(services[0]._id, {
+          severity,
+          downtime,
+          comment,
+          image,
+        })
       );
     } else {
       dispatch(
-        createServiceReport(servicePicked, { severity, downtime, comment })
+        createServiceReport(servicePicked, {
+          severity,
+          downtime,
+          comment,
+          image,
+        })
       );
     }
     history.push(redirect);
@@ -130,6 +173,25 @@ const ReportScreen = ({ location, history }) => {
           </Row>
         </Form.Group>
 
+        {/* UPLOAD IMAGE */}
+
+        <Form.Group controlId="image">
+          <Form.Label>Image</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter image url"
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+          ></Form.Control>
+          <Form.File
+            id="image-file"
+            label="Choose File"
+            custom
+            onChange={uploadFileHandler}
+          ></Form.File>
+          {uploading && <Loader />}
+        </Form.Group>
+
         {/* COMMENT */}
         <Form.Group controlId="comment">
           <Form.Label>Comment</Form.Label>
@@ -142,7 +204,7 @@ const ReportScreen = ({ location, history }) => {
           ></Form.Control>
         </Form.Group>
 
-        <Button type="submit" variant="primary">
+        <Button type="submit" variant="primary" disabled={uploading}>
           Submit
         </Button>
       </Form>

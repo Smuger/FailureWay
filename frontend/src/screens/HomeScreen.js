@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, connect } from "react-redux";
 import Product from "../components/Product";
 import Chart from "../components/Chart";
 import Message from "../components/Message";

@@ -13,18 +13,6 @@ import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const Chart = ({ service }) => {
-  console.log("Calling from component: " + service.name);
-  console.log("Calling from component: " + JSON.stringify(service.data));
-
-  // const data = [
-  //   { name: "Monday", minor: 100, major: 120 },
-  //   { name: "Tuesday", minor: 21, major: 130 },
-  //   { name: "Wednesday", minor: 12, major: 130 },
-  //   { name: "Thursday", minor: 332, major: 50 },
-  //   { name: "Friday", minor: 100, major: 80 },
-  //   { name: "Saturday", minor: 120, major: 60 },
-  //   { name: "Sunday", minor: 30, major: 90 },
-  // ];
   return (
     <Card className="my-3 p-3 rounded">
       <Link to={`/services/${service._id}`}>

@@ -40,7 +40,7 @@ export const serviceListReducer = (state = { services: [] }, action) => {
 };
 
 export const serviceDetailsReducer = (
-  state = { service: { data: [] } },
+  state = { service: { report: [] } },
   action
 ) => {
   switch (action.type) {
