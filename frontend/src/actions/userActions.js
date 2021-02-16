@@ -137,11 +137,11 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    console.log("THIS IS TOKEN: " + userInfo.token);
-    console.log("THIS IS USER: " + user.name);
-    console.log("THIS IS USER: " + user.id);
-    console.log("THIS IS USER: " + user.password);
-    console.log("THIS IS USER: " + user.email);
+    //console.log("THIS IS TOKEN: " + userInfo.token);
+    //console.log("THIS IS USER: " + user.name);
+    //console.log("THIS IS USER: " + user.id);
+    //console.log("THIS IS USER: " + user.password);
+    //console.log("THIS IS USER: " + user.email);
 
     const config = {
       headers: {

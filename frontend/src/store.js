@@ -8,6 +8,7 @@ import {
 import {
   serviceDetailsReducer,
   serviceListReducer,
+  updateServiceDowntimeReducer,
 } from "./reducers/serviceReducers";
 import { cartReducer } from "./reducers/cartReducers";
 import {
@@ -28,6 +29,7 @@ const reducer = combineReducers({
   userUpdateProfile: userUpdateProfileReducer,
   serviceList: serviceListReducer,
   serviceDetails: serviceDetailsReducer,
+  serviceUpdate: updateServiceDowntimeReducer,
 });
 
 const cartItemsFromStorage = localStorage.getItem("cartItems")

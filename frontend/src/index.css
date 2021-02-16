@@ -2,6 +2,15 @@ main {
   min-height: 80vh;
 }
 
+.dzu-dropzone {
+  overflow: hidden !important;
+}
+
+.row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
 .btn-primary {
   background-color: #ffc100;
   border-color: #fcfcfc;

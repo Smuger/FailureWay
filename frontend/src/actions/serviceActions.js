@@ -65,6 +65,9 @@ export const createServiceReport = (serviceId, report) => async (
       userLogin: { userInfo },
     } = getState();
 
+    console.log("Token I'm sending");
+    console.log(userInfo.token);
+
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -72,10 +75,19 @@ export const createServiceReport = (serviceId, report) => async (
       },
     };
 
-    await axios.post(`/api/services/${serviceId}/report`, report, config);
+    const { data } = await axios.post(
+      `/api/services/${serviceId}/report`,
+      report,
+      config
+    );
 
     dispatch({
       type: SERVICE_DOWNTIME_UPDATE_SUCCESS,
+      payload: data,
+    });
+    dispatch({
+      type: SERVICE_DOWNTIME_UPDATE_RESET,
+      payload: data,
     });
   } catch (error) {
     const message =

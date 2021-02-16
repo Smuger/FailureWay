@@ -14,7 +14,7 @@ const HomeScreen = ({ history }) => {
   //const productList = useSelector((state) => state.productList);
   const serviceList = useSelector((state) => state.serviceList);
   //const { loading, error, products } = productList;
-  console.log("LOOK AT" + serviceList);
+  //console.log("LOOK AT" + JSON.stringify(serviceList));
   const { loading, error, services } = serviceList;
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -36,7 +36,7 @@ const HomeScreen = ({ history }) => {
 
   return (
     <>
-      <h1>Active Services</h1>
+      <h1>Daily Cumulative Interruption</h1>
       {loading ? (
         <Loader />
       ) : error ? (

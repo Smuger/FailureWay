@@ -46,15 +46,17 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
 
   const { severity, downtime, comment, image } = req.body;
 
+  //console.log(req.body);
+
   // const imagedata = fs.readFileSync(path.join(__dirname + image), {
   //   encoding: "base64",
   // });
   const service = await Service.findById(req.params.id);
-  console.log("Service to update found: ");
+  //console.log("Service to update found: ");
 
   // Check if report with image
   if (image) {
-    console.log("Image found");
+    //console.log("Image found");
     // Get current directory
     const __dirname = path.resolve();
 
@@ -69,11 +71,14 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
     var imageExt = "image/" + image.split(".")[1];
   }
 
-  // Check is service was found, update weekly data accordingly
+  //console.log("severity: " + severity);
+
+  // Check is service was found
   if (service) {
-    console.log("Working on service");
+    //console.log("Working on service");
     let sameDay = false;
 
+    // Is there there data from specific day alreay in weekly summary?
     for (let i = 0; i < service.data.length; i++) {
       if (service.data[i].name === dayOfTheWeek) {
         dayNumber = i;
@@ -81,6 +86,10 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
       }
     }
 
+    //console.log("Is this an update to existing data? ");
+    //console.log(sameDay);
+
+    // Update with new data
     if (sameDay) {
       switch (severity) {
         case 0:
@@ -92,6 +101,8 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
           newMinor = service.data[dayNumber].minor;
           break;
       }
+      // remove previous weekly data
+      service.data.splice(dayNumber, 1);
     } else {
       switch (severity) {
         case 0:
@@ -103,16 +114,18 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
           break;
       }
     }
-    console.log("Weekly summary data was edited succesfuly");
 
-    // remove previous weekly data
-    service.data.splice(dayNumber, 1);
+    //console.log("newMinor: ");
+    //console.log(newMinor);
 
-    console.log("New weekly summary equals");
-    console.log("dayOfTheWeek: " + dayOfTheWeek);
-    console.log("newMinor: " + newMinor);
-    console.log("newMajor: " + newMajor);
-    console.log("req.user._id: " + req.user._id);
+    //console.log("newMajor: ");
+    //console.log(newMajor);
+
+    //console.log("dayOfTheWeek: ");
+    //console.log(dayOfTheWeek);
+
+    //console.log("req.user._id: ");
+    //console.log(req.user._id);
 
     const newData = {
       name: dayOfTheWeek,
@@ -121,14 +134,17 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
       user: req.user._id,
     };
 
+    //console.log("newData: ");
+    //console.log(newData);
+
     if (image) {
-      console.log("req.user._id: " + req.user._id);
-      console.log("severity: " + severity);
-      console.log("downtime: " + downtime);
-      console.log("comment: " + comment);
-      console.log("image: " + image);
-      console.log("imagedata: " + imagedata);
-      console.log("imageExt: " + imageExt);
+      //console.log("req.user._id: " + req.user._id);
+      //console.log("severity: " + severity);
+      //console.log("downtime: " + downtime);
+      //console.log("comment: " + comment);
+      //console.log("image: " + image);
+      //console.log("imagedata: " + imagedata);
+      //console.log("imageExt: " + imageExt);
 
       var newReport = {
         user: req.user._id,
@@ -142,10 +158,10 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
         },
       };
     } else {
-      console.log("req.user._id: " + req.user._id);
-      console.log("severity: " + severity);
-      console.log("downtime: " + downtime);
-      console.log("comment: " + comment);
+      //console.log("req.user._id: " + req.user._id);
+      //console.log("severity: " + severity);
+      //console.log("downtime: " + downtime);
+      //console.log("comment: " + comment);
 
       var newReport = {
         user: req.user._id,
@@ -154,18 +170,17 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
         comment: comment,
       };
     }
-    console.log("newData: " + JSON.stringify(newData));
+    //console.log("newData: " + JSON.stringify(newData));
 
     service.data.push(newData);
-    console.log("service.data: " + service.data);
-    console.log("newReport: " + JSON.stringify(newReport).toString());
+    //console.log("newReport: ");
+    //console.log(newReport);
 
     service.report.push(newReport);
 
-    console.log("Service 1 test: " + service.report[1]);
     let serviceReportLastPosition = service.report.length - 1;
 
-    console.log("EVERYTHING IS DONE");
+    //console.log("EVERYTHING IS DONE");
 
     try {
       await service.save();
@@ -173,7 +188,7 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
       console.error("Service failed while saving: " + error);
     }
 
-    console.log("Failed to save?");
+    //console.log("Failed to save?");
     res.status(201).json({ message: "Service added" });
   } else {
     res.status(404);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import ImageUploader from "react-images-upload";
 import {
   Form,
   Button,
@@ -14,14 +15,13 @@ import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
+import ImageUpload from "../components/ImageUpload";
+import UploadZone from "../components/UploadZone";
 import FormContainer from "../components/FormContainer";
 import { createServiceReport, listServices } from "../actions/serviceActions";
 import axios from "axios";
 
 const ReportScreen = ({ location, history }) => {
-  // TODO: Replace this with services from DB
-  //const services = ["Service A", "Service B", "Service C"];
-
   const [servicePicked, setServicePicked] = useState("");
   const [severity, setSeverity] = useState(0);
   const [downtime, setDowntime] = useState(1);
@@ -37,14 +37,47 @@ const ReportScreen = ({ location, history }) => {
   const dispatch = useDispatch();
 
   const serviceList = useSelector((state) => state.serviceList);
-
   const { loading, error, services } = serviceList;
 
+  const serviceUpdate = useSelector((state) => state.serviceUpdate);
+  const sendingDataSuccess = serviceUpdate.success;
+
+  console.log("sending true/false?");
+  console.log(sendingDataSuccess);
+
   const redirect = location.search ? location.search.split("=")[1] : "/";
+
+  if (sendingDataSuccess) {
+    history.push(redirect);
+  }
 
   useEffect(() => {
     dispatch(listServices());
   }, [dispatch, location, history]);
+
+  const imageUploadHandler = async (picture) => {
+    console.log(picture[0]);
+    const file = picture[0];
+    console.log(picture);
+    const formData = new FormData();
+    formData.append("image", file);
+    setUploading(true);
+
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+      const { data } = await axios.post("/api/upload", formData, config);
+
+      setImage(data);
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+    }
+  };
 
   const uploadFileHandler = async (e) => {
     const file = e.target.files[0];
@@ -71,19 +104,6 @@ const ReportScreen = ({ location, history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    console.log(
-      "FORM: " +
-        servicePicked +
-        "|" +
-        severity +
-        "|" +
-        downtime +
-        "|" +
-        comment +
-        "|" +
-        image
-    );
-
     // Turn on after testing
     if (servicePicked === "") {
       dispatch(
@@ -104,7 +124,6 @@ const ReportScreen = ({ location, history }) => {
         })
       );
     }
-    history.push(redirect);
   };
 
   return (
@@ -138,6 +157,7 @@ const ReportScreen = ({ location, history }) => {
             <ToggleButtonGroup
               type="radio"
               name="options"
+              style={{ margin: "auto" }}
               defaultValue={0}
               onChange={(selected) => setSeverity(selected)}
             >
@@ -158,7 +178,7 @@ const ReportScreen = ({ location, history }) => {
               name="options"
               defaultValue={1}
               rows={3}
-              style={{ flexWrap: "wrap" }}
+              style={{ flexWrap: "wrap", margin: "auto" }}
               onChange={(selected) => setDowntime(selected)}
             >
               <ToggleButton value={1}>1h</ToggleButton>
@@ -173,23 +193,16 @@ const ReportScreen = ({ location, history }) => {
           </Row>
         </Form.Group>
 
-        {/* UPLOAD IMAGE */}
-
+        {/* UPLOAD IMAGE TEST */}
         <Form.Group controlId="image">
-          <Form.Label>Image</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter image url"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-          ></Form.Control>
-          <Form.File
-            id="image-file"
-            label="Choose File"
-            custom
-            onChange={uploadFileHandler}
-          ></Form.File>
-          {uploading && <Loader />}
+          <ImageUploader
+            withIcon={true}
+            onChange={imageUploadHandler}
+            imgExtension={[".jpg", ".jpeg", ".png", ".gif"]}
+            maxFileSize={5242880}
+            singleImage={true}
+            withPreview={true}
+          />
         </Form.Group>
 
         {/* COMMENT */}
@@ -211,5 +224,29 @@ const ReportScreen = ({ location, history }) => {
     </FormContainer>
   );
 };
+
+// {/* UPLOAD ZONE TEST */}
+// <Form.Group controlId="image">
+// <Form.Label>Image</Form.Label>
+// <UploadZone />
+// </Form.Group>
+
+// {/* UPLOAD IMAGE */}
+// <Form.Group controlId="image">
+// <Form.Label>Image</Form.Label>
+// <Form.Control
+//   type="text"
+//   placeholder="Enter image url"
+//   value={image}
+//   onChange={(e) => setImage(e.target.value)}
+// ></Form.Control>
+// <Form.File
+//   id="image-file"
+//   label="Choose File"
+//   custom
+//   onChange={uploadFileHandler}
+// ></Form.File>
+// {uploading && <Loader />}
+// </Form.Group>
 
 export default ReportScreen;

@@ -18,6 +18,7 @@ const Chart = ({ service }) => {
       <Link to={`/services/${service._id}`}>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart
+            title="Weekly cumulative downtime"
             width={600}
             height={300}
             data={service.data}
@@ -25,7 +26,9 @@ const Chart = ({ service }) => {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
-            <YAxis />
+            <YAxis
+              label={{ value: "Hours", angle: -90, position: "insideLeft" }}
+            />
             <Tooltip
               labelStyle={{ fontFamily: "Helvetica", color: "#455a64" }}
             />
