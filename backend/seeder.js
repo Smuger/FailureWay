@@ -35,7 +35,7 @@ const importData = async () => {
     //await Product.insertMany(sampleProducts);
     await Service.insertMany(sampleServices);
 
-    console.log("Data imported!".green.inverse);
+    //console.log("Data imported!".green.inverse);
     process.exit();
   } catch (error) {
     console.error(`${error}`.red.inverse);
@@ -49,7 +49,7 @@ const destroyData = async () => {
     await Product.deleteMany();
     await User.deleteMany();
 
-    console.log("Data DESTROYED!".red.inverse);
+    //console.log("Data DESTROYED!".red.inverse);
     process.exit();
   } catch (error) {
     console.error(`${error}`.red.inverse);

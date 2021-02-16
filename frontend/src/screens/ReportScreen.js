@@ -41,9 +41,10 @@ const ReportScreen = ({ location, history }) => {
 
   const serviceUpdate = useSelector((state) => state.serviceUpdate);
   const sendingDataSuccess = serviceUpdate.success;
+  const sendingDataError = serviceUpdate.error;
 
-  console.log("sending true/false?");
-  console.log(sendingDataSuccess);
+  //console.log("sending true/false?");
+  //console.log(sendingDataSuccess);
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
@@ -56,9 +57,9 @@ const ReportScreen = ({ location, history }) => {
   }, [dispatch, location, history]);
 
   const imageUploadHandler = async (picture) => {
-    console.log(picture[0]);
+    //console.log(picture[0]);
     const file = picture[0];
-    console.log(picture);
+    //console.log(picture);
     const formData = new FormData();
     formData.append("image", file);
     setUploading(true);
@@ -131,6 +132,9 @@ const ReportScreen = ({ location, history }) => {
       <h1>Report issue</h1>
       {message && <Message variant="info">{message}</Message>}
       {error && <Message variant="danger">{error}</Message>}
+      {sendingDataError && (
+        <Message variant="danger">{sendingDataError}</Message>
+      )}
       <Form onSubmit={submitHandler}>
         {/* CHOOSE SERVICE */}
         <Form.Group controlId="service">

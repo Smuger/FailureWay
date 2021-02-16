@@ -65,8 +65,8 @@ export const createServiceReport = (serviceId, report) => async (
       userLogin: { userInfo },
     } = getState();
 
-    console.log("Token I'm sending");
-    console.log(userInfo.token);
+    //console.log("Token I'm sending");
+    //console.log(userInfo.token);
 
     const config = {
       headers: {
