@@ -14,6 +14,7 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import Chart from "../components/Chart";
 import { listServiceDetails } from "../actions/serviceActions";
+import ReactLazyLoad from "../components/ReactLazyLoad";
 
 const ServiceScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1);
@@ -22,13 +23,30 @@ const ServiceScreen = ({ history, match }) => {
   const serviceDetails = useSelector((state) => state.serviceDetails);
   const { loading, error, service } = serviceDetails;
 
+  const arrayBufferToBase64 = (buffer) => {
+    var binary = "";
+    var bytes = [].slice.call(new Uint8Array(buffer));
+    bytes.forEach((b) => (binary += String.fromCharCode(b)));
+    return window.btoa(binary);
+  };
+
+  const handleImageCreation = ({ review }) => {
+    console.log("handleImageCreation");
+    console.log(review);
+    console.log("img size");
+    console.log(review.img.naturalWidth);
+    console.log(review.img.naturalHeight);
+
+    let base64Flag = `data:${review.img.contentType};base64,`;
+    let imageStr = arrayBufferToBase64(review.img.data.data);
+    let img = "";
+    img = base64Flag + imageStr;
+    return img;
+  };
+
   useEffect(() => {
     dispatch(listServiceDetails(match.params.id));
   }, [match, dispatch]);
-
-  const addToCartHandler = () => {
-    history.push(`/cart/${match.params.id}?qty=${qty}`);
-  };
 
   return (
     <>
@@ -49,29 +67,36 @@ const ServiceScreen = ({ history, match }) => {
               <ListGroup.Item>
                 <h3>Comments:</h3>
               </ListGroup.Item>
-              {service ? (
-                <ListGroup.Item>
-                  {service.report.map((review) => (
-                    <>
-                      {" "}
-                      {review.comment && review.createdAt ? (
-                        <ListGroup.Item key={review._id}>
-                          <Row>
-                            <strong>{review.createdAt.substring(0, 10)}</strong>
-                          </Row>
-                          <Row>
-                            <p>{review.comment}</p>
-                          </Row>
-                        </ListGroup.Item>
-                      ) : (
-                        <></>
-                      )}
-                    </>
-                  ))}
-                </ListGroup.Item>
-              ) : (
-                <p>No comments</p>
-              )}
+              <ListGroup.Item>
+                {service.report.map((review) => (
+                  <>
+                    {review.comment && (
+                      <ListGroup.Item key={review._id}>
+                        {review.hasOwnProperty("img") && (
+                          <img
+                            src={handleImageCreation({ review })}
+                            alt="Helpful alt text"
+                            style={{ maxHeight: "9rem", maxWidth: "9rem" }}
+                          />
+                        )}
+                        {review.comment && (
+                          <>
+                            <Row>
+                              <strong>
+                                {review.createdAt.substring(0, 10)}
+                              </strong>
+                            </Row>
+
+                            <Row>
+                              <span>{review.comment}</span>
+                            </Row>
+                          </>
+                        )}
+                      </ListGroup.Item>
+                    )}
+                  </>
+                ))}
+              </ListGroup.Item>
             </ListGroup>
           </Col>
         </Row>

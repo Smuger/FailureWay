@@ -57,7 +57,7 @@ const ReportScreen = ({ location, history }) => {
   }, [dispatch, location, history]);
 
   const imageUploadHandler = async (picture) => {
-    //console.log(picture[0]);
+    console.log(picture[0]);
     const file = picture[0];
     //console.log(picture);
     const formData = new FormData();
@@ -200,6 +200,11 @@ const ReportScreen = ({ location, history }) => {
         {/* UPLOAD IMAGE TEST */}
         <Form.Group controlId="image">
           <ImageUploader
+            labelStyles={{ fontFamily: "Segoe UI" }}
+            buttonStyles={{ background: "#1863e6" }}
+            label={
+              "Max file size: 5mb, accepted formats: jpg / jpge / gif / png"
+            }
             withIcon={true}
             onChange={imageUploadHandler}
             imgExtension={[".jpg", ".jpeg", ".png", ".gif"]}
