@@ -2,6 +2,10 @@ main {
   min-height: 80vh;
 }
 
+.deleteImage {
+  background: #ffc100 !important;
+}
+
 span {
   /* These are technically the same, but use both */
   overflow-wrap: break-word;

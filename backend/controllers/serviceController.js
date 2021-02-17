@@ -7,7 +7,15 @@ import fs from "fs";
 // @route   GET /api/services
 // @access  Public
 const getServices = asyncHandler(async (req, res) => {
-  const services = await Service.find({});
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
+    : {};
+  const services = await Service.find({ ...keyword });
   res.json(services);
 });
 

@@ -72,13 +72,6 @@ const ServiceScreen = ({ history, match }) => {
                   <>
                     {review.comment && (
                       <ListGroup.Item key={review._id}>
-                        {review.hasOwnProperty("img") && (
-                          <img
-                            src={handleImageCreation({ review })}
-                            alt="Helpful alt text"
-                            style={{ maxHeight: "9rem", maxWidth: "9rem" }}
-                          />
-                        )}
                         {review.comment && (
                           <>
                             <Row>
@@ -91,6 +84,9 @@ const ServiceScreen = ({ history, match }) => {
                               <span>{review.comment}</span>
                             </Row>
                           </>
+                        )}
+                        {review.hasOwnProperty("img") && (
+                          <Image src={handleImageCreation({ review })} fluid />
                         )}
                       </ListGroup.Item>
                     )}

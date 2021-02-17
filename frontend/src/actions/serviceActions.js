@@ -13,10 +13,10 @@ import {
 import axios from "axios";
 import { logout } from "./userActions";
 
-export const listServices = () => async (dispatch) => {
+export const listServices = (keyword = "") => async (dispatch) => {
   try {
     dispatch({ type: SERVICE_LIST_REQUEST });
-    const { data } = await axios.get("/api/services");
+    const { data } = await axios.get(`/api/services?keyword=${keyword}`);
     dispatch({
       type: SERVICE_LIST_SUCCESS,
       payload: data,

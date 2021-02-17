@@ -7,9 +7,12 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 //import { listProducts } from "../actions/productActions";
 import { listServices } from "../actions/serviceActions";
+import SearchBox from "../components/SearchBox";
 
-const HomeScreen = ({ history }) => {
+const HomeScreen = ({ history, match }) => {
   const dispatch = useDispatch();
+
+  const keyword = match.params.keyword;
 
   //const productList = useSelector((state) => state.productList);
   const serviceList = useSelector((state) => state.serviceList);
@@ -28,14 +31,15 @@ const HomeScreen = ({ history }) => {
   // }, [dispatch]);
 
   useEffect(() => {
-    dispatch(listServices());
+    dispatch(listServices(keyword));
     if (userInfo === null) {
       history.push(redirect);
     }
-  }, [dispatch]);
+  }, [dispatch, keyword]);
 
   return (
     <>
+      <SearchBox history={history} />
       <h1>Daily Cumulative Interruption</h1>
       {loading ? (
         <Loader />

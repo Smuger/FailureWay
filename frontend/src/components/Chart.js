@@ -40,13 +40,13 @@ const Chart = ({ service }) => {
       </Link>
 
       <Card.Body>
-        <Link to={`/services/${service._id}`}>
-          <Card.Title as="div">
-            <strong>{service.name}</strong>
-          </Card.Title>
-        </Link>
+        <Card.Title as="div">
+          <strong>{service.name}</strong>
+        </Card.Title>
 
-        <Card.Text as="h3">{service.provider}</Card.Text>
+        <Link to={`/services/${service._id}`}>
+          <Card.Text as="h3">{service.provider}</Card.Text>
+        </Link>
       </Card.Body>
     </Card>
   );
