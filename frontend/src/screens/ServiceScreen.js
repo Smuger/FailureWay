@@ -59,14 +59,12 @@ const ServiceScreen = ({ history, match }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <Row>
-          <Col md={6}>
+          <Col md={12}>
             <Chart service={service} />
           </Col>
           <Col md={6}>
             <ListGroup variant="flush">
-              <ListGroup.Item>
-                <h3>Comments:</h3>
-              </ListGroup.Item>
+              <h3>Comments:</h3>
               <ListGroup.Item>
                 {service.report.map((review) => (
                   <>
