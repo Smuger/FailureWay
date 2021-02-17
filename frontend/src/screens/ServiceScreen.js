@@ -18,6 +18,8 @@ import ReactLazyLoad from "../components/ReactLazyLoad";
 
 const ServiceScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1);
+  const [random1or2, setRandom1or2y] = useState(1);
+  const [message, setMessage] = useState("");
   const dispatch = useDispatch();
 
   const serviceDetails = useSelector((state) => state.serviceDetails);
@@ -29,6 +31,8 @@ const ServiceScreen = ({ history, match }) => {
     bytes.forEach((b) => (binary += String.fromCharCode(b)));
     return window.btoa(binary);
   };
+
+  const handleSendMessage = () => {};
 
   const handleImageCreation = ({ review }) => {
     console.log("handleImageCreation");
@@ -45,6 +49,9 @@ const ServiceScreen = ({ history, match }) => {
   };
 
   useEffect(() => {
+    // Random generator 1 or 2
+    // TODO: Build a real breach check
+    setRandom1or2y(Math.floor(Math.random() * 10) + 1);
     dispatch(listServiceDetails(match.params.id));
   }, [match, dispatch]);
 
@@ -61,6 +68,49 @@ const ServiceScreen = ({ history, match }) => {
         <Row>
           <Col md={12}>
             <Chart service={service} />
+          </Col>
+
+          <Col md={6}>
+            <ListGroup variant="flush">
+              <h3>SLA Details:</h3>
+              {/*TODO: Build a real breach check */}
+              {random1or2 > 6 ? (
+                <Message variant="danger">
+                  <Row>SLA Breached</Row>
+                  <Row>15:03 Wednesday, 17 February 2021 (GMT)</Row>
+                  <Row>Estimated Penalty:</Row>
+                  <Row>£1.000</Row>
+                </Message>
+              ) : (
+                <></>
+              )}
+
+              <ListGroup.Item>
+                <span>Major Downtime Breach: </span>
+                <span>2 hours</span>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <span>Minor Downtime Breach: </span>
+                <span>2 hours</span>
+              </ListGroup.Item>
+              <h3>Contact Delivery Manager:</h3>
+              <Form onSubmit={handleSendMessage}>
+                <Form.Group controlId="comment">
+                  <Form.Label>Send message</Form.Label>
+                  <Form.Control
+                    placeholder="Your message..."
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    as="textarea"
+                    rows={3}
+                  ></Form.Control>
+                </Form.Group>
+
+                <Button type="submit" variant="primary" disabled={false}>
+                  Send
+                </Button>
+              </Form>
+            </ListGroup>
           </Col>
           <Col md={6}>
             <ListGroup variant="flush">
@@ -79,7 +129,7 @@ const ServiceScreen = ({ history, match }) => {
                             </Row>
 
                             <Row>
-                              <span>{review.comment}</span>
+                              <span key={review._id + 4}>{review.comment}</span>
                             </Row>
                           </>
                         )}
