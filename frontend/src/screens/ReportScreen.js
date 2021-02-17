@@ -43,9 +43,6 @@ const ReportScreen = ({ location, history }) => {
   const sendingDataSuccess = serviceUpdate.success;
   const sendingDataError = serviceUpdate.error;
 
-  //console.log("sending true/false?");
-  //console.log(sendingDataSuccess);
-
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
   if (sendingDataSuccess) {
@@ -146,7 +143,7 @@ const ReportScreen = ({ location, history }) => {
           >
             {services.map((service) => (
               <option key={service._id} value={service._id}>
-                {service.name}
+                {service.provider}
               </option>
             ))}
           </Form.Control>
