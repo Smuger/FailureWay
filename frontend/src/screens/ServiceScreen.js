@@ -21,6 +21,17 @@ const ServiceScreen = ({ history, match }) => {
   const [random1or2, setRandom1or2y] = useState(1);
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();
+  const [chartPicked, setChartPicked] = useState("BarChart");
+
+  const services = [
+    { _id: "1", name: "BarChart" },
+    { _id: "2", name: "AreaChart" },
+    { _id: "3", name: "LineChart" },
+    { _id: "4", name: "ComposedChart" },
+    { _id: "5", name: "PieChart" },
+    { _id: "6", name: "RadarChart" },
+    { _id: "7", name: "TreeMap" },
+  ];
 
   const serviceDetails = useSelector((state) => state.serviceDetails);
   const { loading, error, service } = serviceDetails;
@@ -32,7 +43,10 @@ const ServiceScreen = ({ history, match }) => {
     return window.btoa(binary);
   };
 
-  const handleSendMessage = () => {};
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    console.log("What picked?" + chartPicked);
+  };
 
   const handleImageCreation = ({ review }) => {
     console.log("handleImageCreation");
@@ -49,8 +63,6 @@ const ServiceScreen = ({ history, match }) => {
   };
 
   useEffect(() => {
-    // Random generator 1 or 2
-    // TODO: Build a real breach check
     setRandom1or2y(Math.floor(Math.random() * 10) + 1);
     dispatch(listServiceDetails(match.params.id));
   }, [match, dispatch]);
@@ -66,8 +78,26 @@ const ServiceScreen = ({ history, match }) => {
         <Message variant="danger">{error}</Message>
       ) : (
         <Row>
+          <Col md={3}>
+            <Form.Group controlId="service">
+              <Form.Label>Chart Type:</Form.Label>
+              {services !== undefined && (
+                <Form.Control
+                  as="select"
+                  value={chartPicked}
+                  onChange={(e) => setChartPicked(e.target.value)}
+                >
+                  {services.map((service) => (
+                    <option key={service._id} value={service.name}>
+                      {service.name}
+                    </option>
+                  ))}
+                </Form.Control>
+              )}
+            </Form.Group>
+          </Col>
           <Col md={12}>
-            <Chart service={service} />
+            <Chart service={service} chartPicked={chartPicked} />
           </Col>
 
           <Col md={6}>

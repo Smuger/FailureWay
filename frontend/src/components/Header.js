@@ -32,6 +32,13 @@ const Header = () => {
               {userInfo ? (
                 <>
                   {" "}
+                  {userInfo.isAdmin && (
+                    <LinkContainer to="/service">
+                      <Nav.Link>
+                        <i className="fas fa-plus-circle"></i> Add Service
+                      </Nav.Link>
+                    </LinkContainer>
+                  )}
                   <LinkContainer to="/report">
                     <Nav.Link>
                       <i className="fas fa-exclamation-circle"></i> Report Issue
@@ -41,6 +48,7 @@ const Header = () => {
                     <LinkContainer to="/profile">
                       <NavDropdown.Item>Profile</NavDropdown.Item>
                     </LinkContainer>
+
                     <NavDropdown.Item onClick={logoutHandler}>
                       Logout
                     </NavDropdown.Item>

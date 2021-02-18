@@ -9,43 +9,65 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { Card } from "react-bootstrap";
+import { Card, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import AreaChartComponent from "./Charts/AreaChartComponent";
+import BarChartComponent from "./Charts/BarChartComponent";
+import ComposedChartComponent from "./Charts/ComposedChartComponent";
+import LineChartComponent from "./Charts/LineChartComponent";
+import PieChartComponent from "./Charts/PieChartComponent";
+import RadarChartComponent from "./Charts/RadarChartComponent";
+import RadialBarChartComponent from "./Charts/RadialBarChartComponent";
+import ScatterChartComponent from "./Charts/ScatterChartComponent";
+import TreeMapComponent from "./Charts/TreeMapComponent";
 
-const Chart = ({ service }) => {
+const Chart = ({ service, chartPicked }) => {
+  if (!chartPicked) {
+    chartPicked = "BarChart";
+  }
+
+  const choosenChart = () => {
+    console.log(chartPicked);
+    switch (chartPicked) {
+      case "BarChart":
+        return <BarChartComponent service={service} />;
+        break;
+      case "AreaChart":
+        return <AreaChartComponent service={service} />;
+        break;
+      case "LineChart":
+        return <LineChartComponent service={service} />;
+        break;
+      case "ComposedChart":
+        return <ComposedChartComponent service={service} />;
+        break;
+      case "ScatterChart":
+        return <ScatterChartComponent service={service} />;
+        break;
+      case "PieChart":
+        return <PieChartComponent service={service} />;
+        break;
+      case "RadarChart":
+        return <RadarChartComponent service={service} />;
+        break;
+      case "RadialBarChart":
+        return <RadialBarChartComponent service={service} />;
+        break;
+      case "TreeMap":
+        return <TreeMapComponent service={service} />;
+        break;
+    }
+  };
+
   return (
     <Card className="my-3 p-3 rounded">
-      <Link to={`/services/${service._id}`}>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart
-            title="Weekly cumulative downtime"
-            width={600}
-            height={300}
-            data={service.data}
-            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis
-              label={{ value: "Hours", angle: -90, position: "insideLeft" }}
-            />
-            <Tooltip
-              labelStyle={{ fontFamily: "Helvetica", color: "#455a64" }}
-            />
-            <Legend />
-            <Bar dataKey="minor" fill="#ffc100" background={{ fill: "#eee" }} />
-            <Bar dataKey="major" fill="#260505" />
-          </BarChart>
-        </ResponsiveContainer>
-      </Link>
-
+      {choosenChart()}
       <Card.Body>
         <Card.Title as="div">
-          <strong>{service.name}</strong>
+          <strong>{service.provider}</strong>
         </Card.Title>
-
         <Link to={`/services/${service._id}`}>
-          <Card.Text as="h3">{service.provider}</Card.Text>
+          <Card.Text as="h3">{service.name}</Card.Text>
         </Link>
       </Card.Body>
     </Card>
