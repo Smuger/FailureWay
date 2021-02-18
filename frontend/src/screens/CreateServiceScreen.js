@@ -18,109 +18,42 @@ import Loader from "../components/Loader";
 import ImageUpload from "../components/ImageUpload";
 import UploadZone from "../components/UploadZone";
 import FormContainer from "../components/FormContainer";
-import { createServiceReport, listServices } from "../actions/serviceActions";
+import {
+  createService,
+  createServiceReport,
+  listServices,
+} from "../actions/serviceActions";
 import axios from "axios";
 
 const CreateServiceScreen = ({ location, history }) => {
-  const [servicePicked, setServicePicked] = useState("");
-  const [severity, setSeverity] = useState(0);
-  const [downtime, setDowntime] = useState(1);
-  const [minor, setMinor] = useState(0);
-  const [major, setMajor] = useState(0);
-  const [comment, setComment] = useState("");
-  const [allServicesNames, setAllServicesNames] = useState([]);
-  const [image, setImage] = useState("");
-  const [uploading, setUploading] = useState(false);
-
+  const [name, setName] = useState("");
+  const [provider, setProvider] = useState("");
   const [message, setMessage] = useState("");
 
   const dispatch = useDispatch();
 
-  const serviceList = useSelector((state) => state.serviceList);
-  const { loading, error, services } = serviceList;
+  const serviceCreated = useSelector((state) => state.serviceCreate);
+  const { loading, error, success } = serviceCreated;
 
-  const serviceUpdate = useSelector((state) => state.serviceUpdate);
-  const sendingDataSuccess = serviceUpdate.success;
-  const sendingDataError = serviceUpdate.error;
+  const redirect = "/";
 
-  const redirect = location.search ? location.search.split("=")[1] : "/";
+  console.log("success");
+  console.log(success);
 
-  if (sendingDataSuccess) {
+  if (success) {
     history.push(redirect);
   }
 
-  useEffect(() => {
-    dispatch(listServices());
-  }, [dispatch, location, history]);
-
-  const imageUploadHandler = async (picture) => {
-    console.log(picture[0]);
-    const file = picture[0];
-    //console.log(picture);
-    const formData = new FormData();
-    formData.append("image", file);
-    setUploading(true);
-
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const { data } = await axios.post("/api/upload", formData, config);
-
-      setImage(data);
-      setUploading(false);
-    } catch (error) {
-      console.error(error);
-      setUploading(false);
-    }
-  };
-
-  const uploadFileHandler = async (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("image", file);
-    setUploading(true);
-
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const { data } = await axios.post("/api/upload", formData, config);
-
-      setImage(data);
-      setUploading(false);
-    } catch (error) {
-      console.error(error);
-      setUploading(false);
-    }
-  };
+  useEffect(() => {}, [dispatch, location, history]);
 
   const submitHandler = (e) => {
     e.preventDefault();
 
     // Turn on after testing
-    if (servicePicked === "") {
-      dispatch(
-        createServiceReport(services[0]._id, {
-          severity,
-          downtime,
-          comment,
-          image,
-        })
-      );
+    if (name !== "" && provider !== "") {
+      dispatch(createService({ name, provider }));
     } else {
-      dispatch(
-        createServiceReport(servicePicked, {
-          severity,
-          downtime,
-          comment,
-          image,
-        })
-      );
+      setMessage("Service name and service provider fields are required.");
     }
   };
 
@@ -129,17 +62,14 @@ const CreateServiceScreen = ({ location, history }) => {
       <h1>Add Service</h1>
       {message && <Message variant="info">{message}</Message>}
       {error && <Message variant="danger">{error}</Message>}
-      {sendingDataError && (
-        <Message variant="danger">{sendingDataError}</Message>
-      )}
       <Form onSubmit={submitHandler}>
         {/* CHOOSE NAME */}
         <Form.Group controlId="name">
           <Form.Label>Name</Form.Label>
           <Form.Control
             placeholder="Service Name"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             type="text"
             rows={3}
           ></Form.Control>
@@ -150,14 +80,14 @@ const CreateServiceScreen = ({ location, history }) => {
           <Form.Label>Provider</Form.Label>
           <Form.Control
             placeholder="Provider Name"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            value={provider}
+            onChange={(e) => setProvider(e.target.value)}
             type="text"
             rows={3}
           ></Form.Control>
         </Form.Group>
 
-        <Button type="submit" variant="primary" disabled={uploading}>
+        <Button type="submit" variant="primary" disabled={loading}>
           Submit
         </Button>
       </Form>

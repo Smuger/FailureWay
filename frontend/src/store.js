@@ -6,6 +6,7 @@ import {
   productDetailsReducer,
 } from "./reducers/productReducers";
 import {
+  serviceCreateReducer,
   serviceDetailsReducer,
   serviceListReducer,
   updateServiceDowntimeReducer,
@@ -30,6 +31,7 @@ const reducer = combineReducers({
   serviceList: serviceListReducer,
   serviceDetails: serviceDetailsReducer,
   serviceUpdate: updateServiceDowntimeReducer,
+  serviceCreate: serviceCreateReducer,
 });
 
 const cartItemsFromStorage = localStorage.getItem("cartItems")

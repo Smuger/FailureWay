@@ -217,4 +217,28 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
   }
 });
 
-export { getServices, getServiceById, updateServiceDowntime };
+// @desc    Create new service
+// @route   POST /api/service/create
+// @access  Private
+const createService = asyncHandler(async (req, res) => {
+  const { name, provider } = req.body;
+
+  const service = new Service({
+    user: req.user._id,
+    name: name,
+    data: [],
+    report: [],
+    provider: provider,
+  });
+
+  try {
+    await service.save();
+    res.status(201).json({ message: "Service added" });
+  } catch (error) {
+    console.error("Creating service thrown following error: " + error);
+    res.status(404);
+    throw new Error("Unable to create service");
+  }
+});
+
+export { getServices, getServiceById, updateServiceDowntime, createService };
