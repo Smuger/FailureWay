@@ -136,17 +136,22 @@ const ReportScreen = ({ location, history }) => {
         {/* CHOOSE SERVICE */}
         <Form.Group controlId="service">
           <Form.Label>Service</Form.Label>
-          <Form.Control
-            as="select"
-            value={servicePicked}
-            onChange={(e) => setServicePicked(e.target.value)}
-          >
-            {services.map((service) => (
-              <option key={service._id} value={service._id}>
-                {service.name}
-              </option>
-            ))}
-          </Form.Control>
+          {console.log(services)}
+          {services.length > 0 ? (
+            <Form.Control
+              as="select"
+              value={servicePicked}
+              onChange={(e) => setServicePicked(e.target.value)}
+            >
+              {services.map((service) => (
+                <option key={service._id} value={service._id}>
+                  {service.name}
+                </option>
+              ))}
+            </Form.Control>
+          ) : (
+            <Loader />
+          )}
         </Form.Group>
 
         {/* CHOOSE SEVERITY RADIO CHECK */}
