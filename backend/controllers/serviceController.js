@@ -221,11 +221,13 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
 // @route   POST /api/service/create
 // @access  Private
 const createService = asyncHandler(async (req, res) => {
-  const { name, provider } = req.body;
+  const { name, provider, minorSLA, majorSLA } = req.body;
 
   const service = new Service({
     user: req.user._id,
     name: name,
+    slaMinor: minorSLA,
+    slaMajor: majorSLA,
     data: [],
     report: [],
     provider: provider,

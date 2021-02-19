@@ -2,6 +2,50 @@ main {
   min-height: 80vh;
 }
 
+.rc-slider-info {
+  margin: auto;
+  font-weight: 300;
+}
+
+.rc-slider-mark-text {
+  word-break: inherit !important;
+}
+
+.rc-slider-dot {
+  bottom: -0.45rem !important;
+  margin-left: -0.4rem !important;
+  width: 0.8rem !important ;
+  height: 0.8rem !important;
+}
+
+.rc-slider-handle {
+  width: 20px !important;
+  height: 20px !important;
+  border: solid 2px #1863e6 !important;
+}
+
+.rc-slider-rail {
+  height: 10px !important;
+}
+
+.rc-slider-track {
+  height: 10px !important;
+  background-color: #1863e6 !important;
+}
+
+.rc-slider-dot-active {
+  border-color: #1863e6 !important;
+}
+
+.rc-slider {
+  height: 3rem !important;
+}
+
+.badge {
+  margin-top: auto;
+  font-size: 100%;
+}
+
 .deleteImage {
   background: #ffc100 !important;
 }

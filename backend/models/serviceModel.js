@@ -49,6 +49,8 @@ const serviceSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    slaMinor: { type: Number, required: true },
+    slaMajor: { type: Number, required: true },
     data: [dataSchema],
     report: [reportSchema],
   },

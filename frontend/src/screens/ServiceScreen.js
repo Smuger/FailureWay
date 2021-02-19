@@ -145,32 +145,41 @@ const ServiceScreen = ({ history, match }) => {
           <Col md={6}>
             <ListGroup variant="flush">
               <h3>Comments:</h3>
-              <ListGroup.Item>
-                {service.report.map((review) => (
-                  <>
-                    {review.comment && (
-                      <ListGroup.Item key={review._id}>
-                        {review.comment && (
-                          <>
-                            <Row>
-                              <strong>
-                                {review.createdAt.substring(0, 10)}
-                              </strong>
-                            </Row>
+              {service.report.length > 0 ? (
+                <ListGroup.Item>
+                  {service.report.map((review) => (
+                    <>
+                      {review.comment && (
+                        <ListGroup.Item key={review._id}>
+                          {review.comment && (
+                            <>
+                              <Row>
+                                <strong>
+                                  {review.createdAt.substring(0, 10)}
+                                </strong>
+                              </Row>
 
-                            <Row>
-                              <span key={review._id + 4}>{review.comment}</span>
-                            </Row>
-                          </>
-                        )}
-                        {review.hasOwnProperty("img") && (
-                          <Image src={handleImageCreation({ review })} fluid />
-                        )}
-                      </ListGroup.Item>
-                    )}
-                  </>
-                ))}
-              </ListGroup.Item>
+                              <Row>
+                                <span key={review._id + 4}>
+                                  {review.comment}
+                                </span>
+                              </Row>
+                            </>
+                          )}
+                          {review.hasOwnProperty("img") && (
+                            <Image
+                              src={handleImageCreation({ review })}
+                              fluid
+                            />
+                          )}
+                        </ListGroup.Item>
+                      )}
+                    </>
+                  ))}
+                </ListGroup.Item>
+              ) : (
+                <Loader />
+              )}
             </ListGroup>
           </Col>
         </Row>

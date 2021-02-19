@@ -3,7 +3,7 @@ import { Route } from "react-router-dom";
 import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
-import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown, Badge } from "react-bootstrap";
 import { logout } from "../actions/userActions";
 
 const Header = () => {
@@ -31,7 +31,6 @@ const Header = () => {
             <Nav className="ml-auto">
               {userInfo ? (
                 <>
-                  {" "}
                   {userInfo.isAdmin && (
                     <LinkContainer to="/service">
                       <Nav.Link>
@@ -44,6 +43,7 @@ const Header = () => {
                       <i className="fas fa-exclamation-circle"></i> Report Issue
                     </Nav.Link>
                   </LinkContainer>
+                  {userInfo.isAdmin && <Badge variant="success">Admin</Badge>}
                   <NavDropdown title={userInfo.name} id="username">
                     <LinkContainer to="/profile">
                       <NavDropdown.Item>Profile</NavDropdown.Item>
