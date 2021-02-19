@@ -10,7 +10,7 @@ node_modules/
 /coverage
 
 # Static uploads
-/uploads
+# /uploads/
 
 # production
 /frontend/build
