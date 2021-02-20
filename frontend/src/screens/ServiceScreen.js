@@ -225,26 +225,33 @@ const ServiceScreen = ({ history, match }) => {
               <ListGroup.Item>
                 {service.report.map((review) => (
                   <>
-                    {review.comment && (
-                      <ListGroup.Item key={review._id}>
-                        {review.comment && (
-                          <>
-                            <Row>
-                              <strong>
-                                {review.createdAt.substring(0, 10)}
-                              </strong>
-                            </Row>
+                    {review.comment ||
+                      (review.img && (
+                        <ListGroup.Item key={review._id}>
+                          {review.comment ||
+                            (review.img && (
+                              <>
+                                <Row>
+                                  <strong>
+                                    {review.createdAt.substring(0, 10)}
+                                  </strong>
+                                </Row>
 
-                            <Row>
-                              <span key={review._id + 4}>{review.comment}</span>
-                            </Row>
-                          </>
-                        )}
-                        {review.hasOwnProperty("img") && (
-                          <Image src={handleImageCreation({ review })} fluid />
-                        )}
-                      </ListGroup.Item>
-                    )}
+                                <Row>
+                                  <span key={review._id + 4}>
+                                    {review.comment}
+                                  </span>
+                                </Row>
+                              </>
+                            ))}
+                          {review.hasOwnProperty("img") && (
+                            <Image
+                              src={handleImageCreation({ review })}
+                              fluid
+                            />
+                          )}
+                        </ListGroup.Item>
+                      ))}
                   </>
                 ))}
               </ListGroup.Item>
