@@ -225,33 +225,38 @@ const ServiceScreen = ({ history, match }) => {
               <ListGroup.Item>
                 {service.report.map((review) => (
                   <>
-                    {review.comment ||
-                      (review.img && (
-                        <ListGroup.Item key={review._id}>
-                          {review.comment ||
-                            (review.img && (
-                              <>
-                                <Row>
-                                  <strong>
-                                    {review.createdAt.substring(0, 10)}
-                                  </strong>
-                                </Row>
+                    {/** REVIEW HAS IMAGE */}
+                    {review.hasOwnProperty("img") ? (
+                      <ListGroup.Item key={review._id}>
+                        <Row>
+                          <strong>{review.createdAt.substring(0, 10)}</strong>
+                        </Row>
 
-                                <Row>
-                                  <span key={review._id + 4}>
-                                    {review.comment}
-                                  </span>
-                                </Row>
-                              </>
-                            ))}
-                          {review.hasOwnProperty("img") && (
-                            <Image
-                              src={handleImageCreation({ review })}
-                              fluid
-                            />
-                          )}
-                        </ListGroup.Item>
-                      ))}
+                        <Row>
+                          <span>{review.comment}</span>
+                        </Row>
+
+                        <Row>
+                          <Image src={handleImageCreation({ review })} fluid />
+                        </Row>
+                      </ListGroup.Item>
+                    ) : (
+                      <>
+                        {review.comment && (
+                          <ListGroup.Item key={review._id}>
+                            <Row>
+                              <strong>
+                                {review.createdAt.substring(0, 10)}
+                              </strong>
+                            </Row>
+
+                            <Row>
+                              <span>{review.comment}</span>
+                            </Row>
+                          </ListGroup.Item>
+                        )}
+                      </>
+                    )}
                   </>
                 ))}
               </ListGroup.Item>

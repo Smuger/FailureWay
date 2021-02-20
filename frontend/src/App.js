@@ -12,6 +12,7 @@ import profileScreen from "./screens/ProfileScreen";
 import ReportScreen from "./screens/ReportScreen";
 import ServiceScreen from "./screens/ServiceScreen";
 import CreateServiceScreen from "./screens/CreateServiceScreen";
+import MessageScreen from "./screens/MessageScreen";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/services/:id" component={ServiceScreen} />
           <Route path="/" component={HomeScreen} exact />
           <Route path="/report" component={ReportScreen} exact />
+          <Route path="/messages" component={MessageScreen} exact />
           <Route path="/search/:keyword" component={HomeScreen} />
         </Container>
       </main>

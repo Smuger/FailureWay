@@ -12,6 +12,8 @@ node_modules/
 # Static uploads
 # /uploads/
 
+bugs.js
+
 # production
 /frontend/build
 

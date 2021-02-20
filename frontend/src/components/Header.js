@@ -38,6 +38,11 @@ const Header = () => {
                       </Nav.Link>
                     </LinkContainer>
                   )}
+                  <LinkContainer to="/messages">
+                    <Nav.Link>
+                      <i className="fas fa-comments"></i> Messages
+                    </Nav.Link>
+                  </LinkContainer>
                   <LinkContainer to="/report">
                     <Nav.Link>
                       <i className="fas fa-exclamation-circle"></i> Report Issue
