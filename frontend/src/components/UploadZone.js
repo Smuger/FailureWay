@@ -18,7 +18,7 @@ const UploadZone = () => {
 
   // called every time a file's `status` changes
   const handleChangeStatus = ({ meta, file }, status) => {
-    console.log(meta);
+    //console.log(meta);
   };
 
   // receives array of files that are done uploading when submit button is clicked

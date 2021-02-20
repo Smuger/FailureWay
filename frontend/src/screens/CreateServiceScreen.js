@@ -41,8 +41,8 @@ const CreateServiceScreen = ({ location, history }) => {
 
   const redirect = "/";
 
-  console.log("success");
-  console.log(success);
+  //console.log("success");
+  //console.log(success);
 
   if (success) {
     history.push(redirect);

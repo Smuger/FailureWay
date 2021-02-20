@@ -84,6 +84,14 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
     // get file that was uploaded before
     var imagedata = fs.readFileSync(path.join(__dirname + image));
 
+    // remove that file
+    fs.unlink(path.join(__dirname + image), (err) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+    });
+
     imagedata = JSON.parse(JSON.stringify(imagedata));
 
     imagedata = imagedata.data;

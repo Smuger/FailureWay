@@ -22,6 +22,7 @@ const ServiceScreen = ({ history, match }) => {
   const [message, setMessage] = useState("");
   const dispatch = useDispatch();
   const [chartPicked, setChartPicked] = useState("BarChart");
+  const [time, setTime] = useState("");
 
   const services = [
     { _id: "1", name: "BarChart" },
@@ -36,6 +37,56 @@ const ServiceScreen = ({ history, match }) => {
   const serviceDetails = useSelector((state) => state.serviceDetails);
   const { loading, error, service } = serviceDetails;
 
+  const wasSLABreached = () => {
+    //console.log("wasSLABreached Runninng");
+    const breachFound = {
+      date: null,
+      type: null,
+      time: null,
+    };
+
+    //console.log("Time before: " + service.slaMajor);
+    //console.log("Time before: " + service.slaMinor);
+
+    if (service.slaMinor > 0 || service.slaMajor > 0) {
+      //console.log("If started");
+      for (let review of service.report) {
+        //console.log("service.slaMajor: " + service.slaMajor);
+        // check if there is a change for minor or major breach
+        if (review.downtime > Math.max(service.slaMinor, service.slaMajor)) {
+          //console.log("In order");
+          //console.log("Severity: " + review.severity);
+          // major
+          if (review.severity > 0) {
+            //console.log("Major severity");
+            if (review.downtime > service.slaMajor) {
+              //console.log("Time found: " + review.createdAt);
+              breachFound.date = Date(review.createdAt).toString();
+              breachFound.type = "Major";
+              breachFound.time = review.downtime;
+              console.log(breachFound);
+              return breachFound;
+            }
+          }
+          // minor
+          else {
+            if (review.downtime > service.slaMinor) {
+              //console.log("Time found: " + review.createdAt);
+              breachFound.date = Date(review.createdAt).toString();
+              breachFound.type = "Minor";
+              breachFound.time = review.downtime;
+              console.log(breachFound);
+              return breachFound;
+            }
+          }
+        }
+      }
+    }
+    return breachFound;
+  };
+
+  const checkSLAValuesAgainsEachOther = (review) => {};
+
   const arrayBufferToBase64 = (buffer) => {
     var binary = "";
     var bytes = [].slice.call(new Uint8Array(buffer));
@@ -45,15 +96,16 @@ const ServiceScreen = ({ history, match }) => {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    console.log("What picked?" + chartPicked);
+
+    //console.log("What picked?" + chartPicked);
   };
 
   const handleImageCreation = ({ review }) => {
-    console.log("handleImageCreation");
-    console.log(review);
-    console.log("img size");
-    console.log(review.img.naturalWidth);
-    console.log(review.img.naturalHeight);
+    //console.log("handleImageCreation");
+    //console.log(review);
+    //console.log("img size");
+    //console.log(review.img.naturalWidth);
+    //console.log(review.img.naturalHeight);
 
     let base64Flag = `data:${review.img.contentType};base64,`;
     let imageStr = arrayBufferToBase64(review.img.data.data);
@@ -65,7 +117,8 @@ const ServiceScreen = ({ history, match }) => {
   useEffect(() => {
     setRandom1or2y(Math.floor(Math.random() * 10) + 1);
     dispatch(listServiceDetails(match.params.id));
-  }, [match, dispatch]);
+    wasSLABreached();
+  }, [match, dispatch, time]);
 
   return (
     <>
@@ -103,25 +156,49 @@ const ServiceScreen = ({ history, match }) => {
           <Col md={6}>
             <ListGroup variant="flush">
               <h3>SLA Details:</h3>
-              {/*TODO: Build a real breach check */}
-              {random1or2 > 6 ? (
+              {console.log("wasSLABreached().date: " + wasSLABreached().date)}
+              {wasSLABreached().date !== null && (
                 <Message variant="danger">
                   <Row>SLA Breached</Row>
-                  <Row>15:03 Wednesday, 17 February 2021 (GMT)</Row>
+                  <Row>Issue Type: {wasSLABreached().type}</Row>
+                  <Row>
+                    Issue Timespan:{" "}
+                    {wasSLABreached().time === 8
+                      ? "Whole Day"
+                      : wasSLABreached().time}
+                    {wasSLABreached().time < 8
+                      ? wasSLABreached().time === 1
+                        ? " hour"
+                        : " hours"
+                      : ""}
+                  </Row>
+                  <Row>{wasSLABreached().date}</Row>
                   <Row>Estimated Penalty:</Row>
                   <Row>£1.000</Row>
                 </Message>
-              ) : (
-                <></>
               )}
 
               <ListGroup.Item>
-                <span>Major Downtime Breach: </span>
-                <span>2 hours</span>
+                <span>Major Downtime Breach at: </span>
+                <strong>
+                  {service.slaMajor === 8 ? "Whole Day" : service.slaMajor}
+                  {service.slaMajor < 8
+                    ? service.slaMajor === 1
+                      ? " hour"
+                      : " hours"
+                    : ""}
+                </strong>
               </ListGroup.Item>
               <ListGroup.Item>
-                <span>Minor Downtime Breach: </span>
-                <span>2 hours</span>
+                <span>Minor Downtime Breach at: </span>
+                <strong>
+                  {service.slaMinor === 8 ? "Whole Day" : service.slaMinor}
+                  {service.slaMinor < 8
+                    ? service.slaMinor === 1
+                      ? " hour"
+                      : " hours"
+                    : ""}
+                </strong>
               </ListGroup.Item>
               <h3>Contact Delivery Manager:</h3>
               <Form onSubmit={handleSendMessage}>
@@ -145,41 +222,32 @@ const ServiceScreen = ({ history, match }) => {
           <Col md={6}>
             <ListGroup variant="flush">
               <h3>Comments:</h3>
-              {service.report.length > 0 ? (
-                <ListGroup.Item>
-                  {service.report.map((review) => (
-                    <>
-                      {review.comment && (
-                        <ListGroup.Item key={review._id}>
-                          {review.comment && (
-                            <>
-                              <Row>
-                                <strong>
-                                  {review.createdAt.substring(0, 10)}
-                                </strong>
-                              </Row>
+              <ListGroup.Item>
+                {service.report.map((review) => (
+                  <>
+                    {review.comment && (
+                      <ListGroup.Item key={review._id}>
+                        {review.comment && (
+                          <>
+                            <Row>
+                              <strong>
+                                {review.createdAt.substring(0, 10)}
+                              </strong>
+                            </Row>
 
-                              <Row>
-                                <span key={review._id + 4}>
-                                  {review.comment}
-                                </span>
-                              </Row>
-                            </>
-                          )}
-                          {review.hasOwnProperty("img") && (
-                            <Image
-                              src={handleImageCreation({ review })}
-                              fluid
-                            />
-                          )}
-                        </ListGroup.Item>
-                      )}
-                    </>
-                  ))}
-                </ListGroup.Item>
-              ) : (
-                <Loader />
-              )}
+                            <Row>
+                              <span key={review._id + 4}>{review.comment}</span>
+                            </Row>
+                          </>
+                        )}
+                        {review.hasOwnProperty("img") && (
+                          <Image src={handleImageCreation({ review })} fluid />
+                        )}
+                      </ListGroup.Item>
+                    )}
+                  </>
+                ))}
+              </ListGroup.Item>
             </ListGroup>
           </Col>
         </Row>

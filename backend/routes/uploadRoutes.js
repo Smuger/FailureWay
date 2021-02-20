@@ -37,8 +37,11 @@ const upload = multer({
 });
 
 router.post("/", upload.single("image"), (req, res) => {
-  //console.log(req);
-  res.send(`/${req.file.path}`);
+  if (process.platform === "win32") {
+    res.send(`\\${req.file.path}`);
+  } else {
+    res.send(`/${req.file.path}`);
+  }
 });
 
 export default router;

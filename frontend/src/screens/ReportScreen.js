@@ -54,7 +54,7 @@ const ReportScreen = ({ location, history }) => {
   }, [dispatch, location, history]);
 
   const imageUploadHandler = async (picture) => {
-    console.log(picture[0]);
+    //console.log(picture[0]);
     const file = picture[0];
     //console.log(picture);
     const formData = new FormData();
@@ -136,7 +136,7 @@ const ReportScreen = ({ location, history }) => {
         {/* CHOOSE SERVICE */}
         <Form.Group controlId="service">
           <Form.Label>Service</Form.Label>
-          {console.log(services)}
+
           {services.length > 0 ? (
             <Form.Control
               as="select"
