@@ -19,7 +19,7 @@ const MessageScreen = ({ location, history }) => {
           <Row>
             <Col
               md={{ span: 6, offset: 3 }}
-              style={{ backgroundColor: "#333" }}
+              style={{ backgroundColor: "#FFC100" }}
             >
               <ChatItem
                 alt={"Reactjs"}
@@ -33,7 +33,7 @@ const MessageScreen = ({ location, history }) => {
             </Col>{" "}
             <Col
               md={{ span: 6, offset: 3 }}
-              style={{ backgroundColor: "#333" }}
+              style={{ backgroundColor: "#FFC100" }}
             >
               <ChatItem
                 alt={"Reactjs"}
@@ -47,7 +47,7 @@ const MessageScreen = ({ location, history }) => {
             </Col>{" "}
             <Col
               md={{ span: 6, offset: 3 }}
-              style={{ backgroundColor: "#333" }}
+              style={{ backgroundColor: "#FFC100" }}
             >
               <ChatItem
                 alt={"Reactjs"}
@@ -61,7 +61,7 @@ const MessageScreen = ({ location, history }) => {
             </Col>{" "}
             <Col
               md={{ span: 6, offset: 3 }}
-              style={{ backgroundColor: "#333" }}
+              style={{ backgroundColor: "#FFC100" }}
             >
               <ChatItem
                 alt={"Reactjs"}
@@ -77,11 +77,18 @@ const MessageScreen = ({ location, history }) => {
         </Container>
       ) : (
         <>
-          <Container style={{ overflowY: "scroll", height: "50vh" }}>
+          <Container
+            style={{
+              overflowY: "scroll",
+
+              height: "50vh",
+              border: "1px solid rgba(0,0,0,.125)",
+            }}
+          >
             <Row>
               <Col
                 md={{ span: 5, offset: 6 }}
-                style={{ backgroundColor: "#333" }}
+                style={{ backgroundColor: "#FFC100" }}
               >
                 <MessageBox
                   position={"right"}
@@ -95,7 +102,7 @@ const MessageScreen = ({ location, history }) => {
             <Row>
               <Col
                 md={{ span: 5, offset: 1 }}
-                style={{ backgroundColor: "#FFC100" }}
+                style={{ backgroundColor: "#333" }}
               >
                 <MessageBox
                   position={"left"}
@@ -107,7 +114,7 @@ const MessageScreen = ({ location, history }) => {
             <Row>
               <Col
                 md={{ span: 5, offset: 1 }}
-                style={{ backgroundColor: "#FFC100" }}
+                style={{ backgroundColor: "#333" }}
               >
                 <MessageBox
                   position={"left"}
@@ -119,7 +126,7 @@ const MessageScreen = ({ location, history }) => {
             <Row>
               <Col
                 md={{ span: 5, offset: 1 }}
-                style={{ backgroundColor: "#FFC100" }}
+                style={{ backgroundColor: "#333" }}
               >
                 <MessageBox
                   position={"left"}
@@ -131,7 +138,7 @@ const MessageScreen = ({ location, history }) => {
             <Row>
               <Col
                 md={{ span: 5, offset: 1 }}
-                style={{ backgroundColor: "#FFC100" }}
+                style={{ backgroundColor: "#333" }}
               >
                 <MessageBox
                   position={"left"}
@@ -143,7 +150,7 @@ const MessageScreen = ({ location, history }) => {
             <Row>
               <Col
                 md={{ span: 5, offset: 1 }}
-                style={{ backgroundColor: "#FFC100" }}
+                style={{ backgroundColor: "#333" }}
               >
                 <MessageBox
                   position={"left"}
@@ -155,7 +162,7 @@ const MessageScreen = ({ location, history }) => {
             <Row>
               <Col
                 md={{ span: 5, offset: 6 }}
-                style={{ backgroundColor: "#333" }}
+                style={{ backgroundColor: "#FFC100" }}
               >
                 <MessageBox
                   position={"right"}
@@ -169,7 +176,7 @@ const MessageScreen = ({ location, history }) => {
             <Row>
               <Col
                 md={{ span: 5, offset: 6 }}
-                style={{ backgroundColor: "#333" }}
+                style={{ backgroundColor: "#FFC100" }}
               >
                 <MessageBox
                   position={"right"}
@@ -182,11 +189,10 @@ const MessageScreen = ({ location, history }) => {
             </Row>
           </Container>
           <FormContainer>
-            <Form onSubmit={submitHandler}>
+            <Form onSubmit={submitHandler} style={{ marginTop: "1rem" }}>
               <Form.Group controlId="name">
-                <Form.Label>Message:</Form.Label>
                 <Form.Control
-                  placeholder="Describe how this downtime affected you"
+                  placeholder="Your response"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   as="textarea"
