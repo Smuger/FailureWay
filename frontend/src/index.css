@@ -2,6 +2,15 @@ main {
   min-height: 80vh;
 }
 
+.container::-webkit-scrollbar {
+  display: none;
+}
+
+.container {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 .rc-slider-info {
   margin: auto;
   font-weight: 300;

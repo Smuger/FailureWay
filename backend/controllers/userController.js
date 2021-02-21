@@ -77,6 +77,48 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Get user profile
+// @route GET /api/users/messages
+// @access PRIVATE
+const getUserMessages = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    res.json({
+      messageBank: user.messageBank,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+// @desc Register a new user
+// @route POST /api/users
+// @access Public
+const postUserMessage = asyncHandler(async (req, res) => {
+  const { recipient, message } = req.body;
+
+  const user = await User.findOne(req.user._id);
+
+  const messageArray = {};
+
+  const conversations = {
+    recipient: recipient,
+  };
+
+  user.messageBank.push();
+
+  try {
+    await user.save();
+    res.status(201).json({ message: "Message sent" });
+  } catch (error) {
+    console.error("Unable to send message: " + error);
+    res.status(404);
+    throw new Error("Service not found");
+  }
+});
+
 // @desc Update user profile
 // @route PUT /api/users/profile
 // @access PRIVATE
@@ -108,4 +150,11 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-export { authUser, getUserProfile, registerUser, updateUserProfile };
+export {
+  authUser,
+  getUserProfile,
+  registerUser,
+  updateUserProfile,
+  getUserMessages,
+  postUserMessage,
+};

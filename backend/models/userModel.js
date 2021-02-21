@@ -1,6 +1,42 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
+const messageSchema = mongoose.Schema(
+  {
+    recipient: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+    sender: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+    message: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const conversationsSchema = mongoose.Schema(
+  {
+    recipient: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+    messagesForThatUser: [messageSchema],
+  },
+  {
+    timestamps: true,
+  }
+);
+
 const userSchema = mongoose.Schema(
   {
     name: {
@@ -21,6 +57,7 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    messageBank: [conversationsSchema],
   },
   {
     timestamps: true,

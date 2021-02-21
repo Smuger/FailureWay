@@ -14,6 +14,7 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import Chart from "../components/Chart";
 import { listServiceDetails } from "../actions/serviceActions";
+import { postUserMessage } from "../actions/userActions";
 import ReactLazyLoad from "../components/ReactLazyLoad";
 
 const ServiceScreen = ({ history, match }) => {
@@ -94,7 +95,13 @@ const ServiceScreen = ({ history, match }) => {
     return window.btoa(binary);
   };
 
+  const messageToSend = {
+    recipient: "",
+    message: message,
+  };
+
   const handleSendMessage = (e) => {
+    dispatch(postUserMessage(messageToSend));
     e.preventDefault();
 
     //console.log("What picked?" + chartPicked);
