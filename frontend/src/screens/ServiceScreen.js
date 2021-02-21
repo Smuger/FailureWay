@@ -62,28 +62,63 @@ const ServiceScreen = ({ history, match }) => {
             //console.log("Major severity");
             if (review.downtime > service.slaMajor) {
               //console.log("Time found: " + review.createdAt);
-              breachFound.date = Date(review.createdAt).toString();
+              breachFound.date = new Date(review.createdAt).toString();
+
               breachFound.type = "Major";
               breachFound.time = review.downtime;
-              console.log(breachFound);
-              return breachFound;
+
+              return (
+                <Message variant="danger">
+                  <Row>SLA Breached</Row>
+                  <Row>Issue Type: {breachFound.type}</Row>
+                  <Row>
+                    Issue Timespan:{" "}
+                    {breachFound.time === 8 ? "Whole Day" : breachFound.time}
+                    {breachFound.time < 8
+                      ? breachFound.time === 1
+                        ? " hour"
+                        : " hours"
+                      : ""}
+                  </Row>
+                  <Row>{breachFound.date}</Row>
+                  <Row>Estimated Penalty:</Row>
+                  <Row>£1.000</Row>
+                </Message>
+              );
             }
           }
           // minor
           else {
             if (review.downtime > service.slaMinor) {
               //console.log("Time found: " + review.createdAt);
-              breachFound.date = Date(review.createdAt).toString();
+
+              breachFound.date = new Date(review.createdAt).toString();
               breachFound.type = "Minor";
               breachFound.time = review.downtime;
-              console.log(breachFound);
-              return breachFound;
+
+              return (
+                <Message variant="danger">
+                  <Row>SLA Breached</Row>
+                  <Row>Issue Type: {breachFound.type}</Row>
+                  <Row>
+                    Issue Timespan:{" "}
+                    {breachFound.time === 8 ? "Whole Day" : breachFound.time}
+                    {breachFound.time < 8
+                      ? breachFound.time === 1
+                        ? " hour"
+                        : " hours"
+                      : ""}
+                  </Row>
+                  <Row>{breachFound.date}</Row>
+                  <Row>Estimated Penalty:</Row>
+                  <Row>£1.000</Row>
+                </Message>
+              );
             }
           }
         }
       }
     }
-    return breachFound;
   };
 
   const checkSLAValuesAgainsEachOther = (review) => {};
@@ -163,27 +198,8 @@ const ServiceScreen = ({ history, match }) => {
           <Col md={6}>
             <ListGroup variant="flush">
               <h3>SLA Details:</h3>
-              {console.log("wasSLABreached().date: " + wasSLABreached().date)}
-              {wasSLABreached().date !== null && (
-                <Message variant="danger">
-                  <Row>SLA Breached</Row>
-                  <Row>Issue Type: {wasSLABreached().type}</Row>
-                  <Row>
-                    Issue Timespan:{" "}
-                    {wasSLABreached().time === 8
-                      ? "Whole Day"
-                      : wasSLABreached().time}
-                    {wasSLABreached().time < 8
-                      ? wasSLABreached().time === 1
-                        ? " hour"
-                        : " hours"
-                      : ""}
-                  </Row>
-                  <Row>{wasSLABreached().date}</Row>
-                  <Row>Estimated Penalty:</Row>
-                  <Row>£1.000</Row>
-                </Message>
-              )}
+
+              {wasSLABreached()}
 
               <ListGroup.Item>
                 <span>Major Downtime Breach at: </span>
