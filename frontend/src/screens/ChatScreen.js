@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserMessages, postUserMessage } from "../actions/userActions";
 import { animateScroll } from "react-scroll";
 import ScrollDown from "../components/ScrollDown";
+import { ChatItem, MessageBox } from "react-chat-elements";
 
 const useInterval = (callback, delay) => {
   const savedCallback = useRef();
@@ -69,7 +70,21 @@ const ChatScreen = ({ location, history, match }) => {
     console.log("getUserMessages dispatched again");
   };
 
-  const letters = { letter: "sd", id: 1 };
+  const letters = {
+    letter: "sd",
+    id: 1,
+  };
+
+  if (messageBank) {
+    letters.letter = messageBank.messageBank
+      .filter((value) => {
+        return value.recipient === match.params.id;
+      })[0]
+      .recipientName.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toLowerCase();
+  }
 
   useEffect(() => {
     dispatch(getUserMessages());
@@ -77,6 +92,24 @@ const ChatScreen = ({ location, history, match }) => {
 
   return (
     <>
+      {messageBank && (
+        <Col md={{ span: 6, offset: 1 }}>
+          <Row>
+            <ChatItem
+              alt={"Reactjs"}
+              title={`${
+                messageBank.messageBank.filter((value) => {
+                  return value.recipient === match.params.id;
+                })[0].recipientName
+              }`}
+              date={""}
+              unread={0}
+              letterItem={letters}
+              onClick={() => setFirstScreen(false)}
+            />
+          </Row>
+        </Col>
+      )}
       <Container
         style={{
           overflowY: "scroll",

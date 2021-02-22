@@ -30,6 +30,10 @@ const conversationsSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
+    recipientName: {
+      type: String,
+      required: true,
+    },
     messagesForThatUser: [messageSchema],
   },
   {

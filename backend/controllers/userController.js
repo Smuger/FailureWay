@@ -127,12 +127,14 @@ const postUserMessage = asyncHandler(async (req, res) => {
   let conversations = {
     recipient: recipient,
     messagesForThatUser: [messageArray],
+    recipientName: user2.name,
   };
 
   // Reciepient Conversation
   let conversations2 = {
     recipient: req.user._id,
     messagesForThatUser: [messageArray],
+    recipientName: req.user.name,
   };
 
   console.log("CONVERSATIONS DONE");

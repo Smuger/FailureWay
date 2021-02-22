@@ -8,6 +8,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserMessages } from "../actions/userActions";
 import { Link } from "react-router-dom";
 
+const useInterval = (callback, delay) => {
+  const savedCallback = useRef();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  });
+
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+
+    let id = setInterval(tick, delay);
+    return () => clearInterval(id);
+  }, [delay]);
+};
+
 const MessagesScreen = ({ location, history }) => {
   const [message, setMessage] = useState("");
   const [firstScreen, setFirstScreen] = useState(true);
@@ -31,6 +48,10 @@ const MessagesScreen = ({ location, history }) => {
     scrollToBottom();
   }, []);
 
+  useInterval(() => {
+    dispatch(getUserMessages());
+  }, 20000);
+
   return (
     <>
       <Container style={{ overflowY: "scroll", height: "70vh" }}>
@@ -53,7 +74,7 @@ const MessagesScreen = ({ location, history }) => {
                 >
                   <ChatItem
                     alt={"Reactjs"}
-                    title={`${conv.recipient}`}
+                    title={`${conv.recipientName}`}
                     subtitle={
                       conv.messagesForThatUser[
                         conv.messagesForThatUser.length - 1
