@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route } from "react-router-dom";
 import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,6 +18,12 @@ const Header = () => {
     dispatch(logout());
     history.push(redirect);
   };
+
+  useEffect(() => {
+    if (userInfo === null || !userInfo.hasOwnProperty("_id")) {
+      logoutHandler();
+    }
+  }, []);
 
   return (
     <header>

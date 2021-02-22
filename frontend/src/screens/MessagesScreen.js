@@ -33,74 +33,43 @@ const MessagesScreen = ({ location, history }) => {
 
   return (
     <>
-      <Container style={{ overflowY: "scroll", height: "100vh" }}>
+      <Container style={{ overflowY: "scroll", height: "70vh" }}>
         <Row>
-          <Col
-            md={{ span: 6, offset: 3 }}
-            style={{ backgroundColor: "#FFC100" }}
-          >
-            <Link to="/messages/testID" style={{ textDecoration: "none" }}>
-              <ChatItem
-                alt={"Reactjs"}
-                title={"SDM [Blackboard Inc. - Chat]"}
-                subtitle={"Test first message"}
-                date={new Date()}
-                unread={0}
-                letterItem={letters}
-                onClick={() => setFirstScreen(false)}
-              />
-            </Link>
-          </Col>{" "}
-          <Col
-            md={{ span: 6, offset: 3 }}
-            style={{ backgroundColor: "#FFC100" }}
-          >
-            <Link to="/messages/testID" style={{ textDecoration: "none" }}>
-              <ChatItem
-                alt={"Reactjs"}
-                title={"SDM [Blackboard Inc. - Video Stream]"}
-                subtitle={"Test second message"}
-                date={new Date()}
-                unread={0}
-                letterItem={letters}
-                onClick={() => setFirstScreen(false)}
-              />
-            </Link>
-          </Col>{" "}
-          <Col
-            md={{ span: 6, offset: 3 }}
-            style={{ backgroundColor: "#FFC100" }}
-          >
-            <Link to="/messages/testID" style={{ textDecoration: "none" }}>
-              <ChatItem
-                alt={"Reactjs"}
-                title={"SDM [Blackboard Inc. - Collaborate]"}
-                subtitle={
-                  "Test long long long long long long long long long long long long"
-                }
-                date={new Date()}
-                unread={0}
-                letterItem={letters}
-                onClick={() => setFirstScreen(false)}
-              />
-            </Link>
-          </Col>{" "}
-          <Col
-            md={{ span: 6, offset: 3 }}
-            style={{ backgroundColor: "#FFC100" }}
-          >
-            <Link to="/messages/testID" style={{ textDecoration: "none" }}>
-              <ChatItem
-                alt={"Reactjs"}
-                title={"SDM [Brunel - Email]"}
-                subtitle={"Test short message"}
-                date={new Date()}
-                unread={0}
-                letterItem={letters}
-                onClick={() => setFirstScreen(false)}
-              />
-            </Link>
-          </Col>
+          {messageBank !== undefined &&
+            messageBank.messageBank.length === 0 &&
+            messageBank.messageBank.length === 0 && (
+              <h1>You have no messages</h1>
+            )}
+          {messageBank !== undefined ? (
+            messageBank.messageBank.map((conv) => (
+              <Col
+                md={{ span: 6, offset: 3 }}
+                style={{ backgroundColor: "#FFC100" }}
+                key={conv._id}
+              >
+                <Link
+                  to={`/messages/${conv.recipient}`}
+                  style={{ textDecoration: "none" }}
+                >
+                  <ChatItem
+                    alt={"Reactjs"}
+                    title={`${conv.recipient}`}
+                    subtitle={
+                      conv.messagesForThatUser[
+                        conv.messagesForThatUser.length - 1
+                      ].message
+                    }
+                    date={new Date()}
+                    unread={0}
+                    letterItem={letters}
+                    onClick={() => setFirstScreen(false)}
+                  />
+                </Link>
+              </Col>
+            ))
+          ) : (
+            <h1>You have no messages</h1>
+          )}
         </Row>
       </Container>
     </>

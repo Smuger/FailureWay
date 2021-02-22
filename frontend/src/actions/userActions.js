@@ -204,27 +204,41 @@ export const getUserMessages = (id) => async (dispatch, getState) => {
   }
 };
 
-export const postUserMessage = ({ recipient, message }) => async (dispatch) => {
+export const postUserMessage = (messageToSend) => async (
+  dispatch,
+  getState
+) => {
   try {
     dispatch({
       type: USER_SEND_MESSAGE_REQUEST,
     });
 
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    console.log("Token I'm sending");
+    console.log(userInfo.token);
+    console.log(messageToSend);
+
     const config = {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
       },
     };
 
     const { data } = await axios.post(
       "/api/users/messages",
-      { recipient, message },
+      messageToSend,
       config
     );
     dispatch({
       type: USER_SEND_MESSAGE_SUCCESS,
       payload: data,
     });
+
+    dispatch(getUserMessages(userInfo._id));
 
     localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {

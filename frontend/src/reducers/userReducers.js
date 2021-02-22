@@ -64,11 +64,11 @@ export const userMessagesReducer = (state = {}, action) => {
 export const userSendMessage = (state = {}, action) => {
   switch (action.type) {
     case USER_SEND_MESSAGE_REQUEST:
-      return { loading: true };
+      return { loading: true, success: false };
     case USER_SEND_MESSAGE_SUCCESS:
       return { loading: false, success: true, userInfo: action.payload };
     case USER_SEND_MESSAGE_FAIL:
-      return { loading: false, error: action.payload };
+      return { loading: false, error: action.payload, success: false };
     default:
       return state;
   }

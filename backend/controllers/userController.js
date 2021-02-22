@@ -99,18 +99,53 @@ const getUserMessages = asyncHandler(async (req, res) => {
 const postUserMessage = asyncHandler(async (req, res) => {
   const { recipient, message } = req.body;
 
+  console.log("Server recived: " + recipient + " " + message);
+
+  // Sender db object
   const user = await User.findOne(req.user._id);
 
-  const messageArray = {};
+  console.log(user);
+  console.log("user found");
+  // Reciepient db object
+  const user2 = await User.findById(recipient);
 
-  const conversations = {
+  console.log(user2);
+  console.log("recipient found");
+
+  console.log("USERS FOUND");
+
+  // Sender Array message
+  const messageArray = {
     recipient: recipient,
+    sender: req.user._id,
+    message: message,
   };
 
-  user.messageBank.push();
+  console.log("ARRAY MESSAGE DONE");
+
+  // Sender Conversation
+  let conversations = {
+    recipient: recipient,
+    messagesForThatUser: [messageArray],
+  };
+
+  // Reciepient Conversation
+  let conversations2 = {
+    recipient: req.user._id,
+    messagesForThatUser: [messageArray],
+  };
+
+  console.log("CONVERSATIONS DONE");
+
+  updateMessageDBs(user, recipient, message, conversations, messageArray);
+  console.log("FIST FUNCTION DONE");
+  updateMessageDBs(user2, req.user._id, message, conversations2, messageArray);
+  console.log("SECOND FUNCTION DONE");
 
   try {
     await user.save();
+    await user2.save();
+    console.log("Message saved");
     res.status(201).json({ message: "Message sent" });
   } catch (error) {
     console.error("Unable to send message: " + error);
@@ -118,6 +153,39 @@ const postUserMessage = asyncHandler(async (req, res) => {
     throw new Error("Service not found");
   }
 });
+
+const updateMessageDBs = (
+  user,
+  recipient,
+  message,
+  conversations,
+  messageArray
+) => {
+  let conversationPosition = null;
+  console.log(user.messageBank.length);
+  if (user.messageBank.length > 0) {
+    for (let i = 0; i < user.messageBank.length; i++) {
+      console.log(user.messageBank[i].recipient);
+      console.log(recipient);
+      if (user.messageBank[i].recipient.equals(recipient)) {
+        console.log("Conversation found");
+        conversationPosition = i;
+        break;
+      }
+    }
+    if (conversationPosition !== null) {
+      console.log("Converstation already exist.");
+      user.messageBank[conversationPosition].messagesForThatUser.push(
+        messageArray
+      );
+      console.log("Pushed");
+    } else {
+      user.messageBank.push(conversations);
+    }
+  } else {
+    user.messageBank.push(conversations);
+  }
+};
 
 // @desc Update user profile
 // @route PUT /api/users/profile

@@ -1,153 +1,103 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ChatItem, MessageBox } from "react-chat-elements";
+
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import "react-chat-elements/dist/main.css";
 import Avatar from "react-avatar";
 import FormContainer from "../components/FormContainer";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { getUserMessages, postUserMessage } from "../actions/userActions";
+import { animateScroll } from "react-scroll";
+import ScrollDown from "../components/ScrollDown";
 
-const ChatScreen = ({ location, history }) => {
+const useInterval = (callback, delay) => {
+  const savedCallback = useRef();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  });
+
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+
+    let id = setInterval(tick, delay);
+    return () => clearInterval(id);
+  }, [delay]);
+};
+
+const ChatScreen = ({ location, history, match }) => {
   const [message, setMessage] = useState("");
   const [firstScreen, setFirstScreen] = useState(true);
 
   const dispatch = useDispatch();
 
   const userMessages = useSelector((state) => state.userMessages);
-  const { loading, error, messageBank } = userMessages;
+  const { loading, success, messageBank } = userMessages;
 
-  console.log("TEST");
-  console.log(messageBank);
+  console.log("MATCH PARAM");
+  console.log(match.params.id);
 
-  const submitHandler = () => {};
+  if (messageBank) {
+    let test = messageBank.messageBank.filter((value) => {
+      return value._id === match.params.id;
+    });
+    console.log("filter test");
+    console.log(test);
+  }
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const messageToSend = {
+    recipient: match.params.id,
+    message: message,
+  };
+
+  useInterval(() => {
+    dispatch(getUserMessages());
+  }, 20000);
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    dispatch(postUserMessage(messageToSend));
+    setMessage("");
+
+    var list = document.getElementById("myDiv");
+    list.scrollTop = list.offsetHeight;
+    console.log("getUserMessages dispatched again");
+  };
 
   const letters = { letter: "sd", id: 1 };
 
-  const messagesEndRef = useRef(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
   useEffect(() => {
-    scrollToBottom();
-  }, []);
+    dispatch(getUserMessages());
+  }, [match, dispatch]);
 
   return (
     <>
-      <Link className="btn btn-dark my-3" to="/messages">
-        Go Back
-      </Link>
       <Container
         style={{
           overflowY: "scroll",
-          height: "50vh",
+          height: "65vh",
           border: "1px solid rgba(0,0,0,.125)",
-          backgroundColor: "#333",
         }}
+        id={"myDiv"}
       >
-        <Row>
-          <Col md={{ span: 5, offset: 6 }}>
-            <MessageBox
-              position={"right"}
-              type={"text"}
-              text={"I would like to talk to you about our last service falure"}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col
-            md={{ span: 5, offset: 1 }}
-            style={{ backgroundColor: "#FFC100" }}
-          >
-            <MessageBox
-              position={"left"}
-              type={"text"}
-              text={"I am glad that you connected me."}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col
-            md={{ span: 5, offset: 1 }}
-            style={{ backgroundColor: "#FFC100" }}
-          >
-            <MessageBox
-              position={"left"}
-              type={"text"}
-              text={
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pretium, nisl eu sodales molestie, nunc nibh luctus purus, et rutrum dolor neque in nibh. Etiam sed lectus id elit lacinia sagittis porta non ligula."
-              }
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col
-            md={{ span: 5, offset: 1 }}
-            style={{ backgroundColor: "#FFC100" }}
-          >
-            <MessageBox
-              position={"left"}
-              type={"text"}
-              text={
-                "Pellentesque sit amet ipsum eu purus suscipit egestas. Donec sit amet hendrerit sem. Pellentesque ultricies metus nec finibus dapibus. Duis vel nulla et velit tempor commodo."
-              }
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col
-            md={{ span: 5, offset: 1 }}
-            style={{ backgroundColor: "#FFC100" }}
-          >
-            <MessageBox
-              position={"left"}
-              type={"text"}
-              text={
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam elementum tortor accumsan, molestie nulla et, dictum risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;"
-              }
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col
-            md={{ span: 5, offset: 1 }}
-            style={{ backgroundColor: "#FFC100" }}
-          >
-            <MessageBox
-              position={"left"}
-              type={"text"}
-              text={
-                "Maecenas lobortis pretium est sit amet tincidunt. Cras at mauris est."
-              }
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col md={{ span: 5, offset: 6 }}>
-            <MessageBox
-              position={"right"}
-              type={"text"}
-              text={
-                "Aenean nisl justo, tempor quis velit ac, pulvinar volutpat risus. In convallis malesuada nulla, at venenatis turpis auctor quis."
-              }
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col md={{ span: 5, offset: 6 }} ref={messagesEndRef}>
-            <MessageBox
-              position={"right"}
-              type={"text"}
-              text={
-                "Quisque dapibus massa et tortor eleifend suscipit. Aenean imperdiet justo vitae sapien fermentum egestas. Donec eget odio eros. Nullam eu justo nulla. Proin et sodales neque. Praesent finibus, ligula non laoreet tempus, sem ex laoreet enim, ac ultrices sem tortor."
-              }
-            />
-          </Col>
-        </Row>
+        {messageBank && (
+          <ScrollDown
+            messages={
+              messageBank.messageBank.filter((value) => {
+                return value.recipient === match.params.id;
+              })[0].messagesForThatUser
+            }
+            userInfo={userInfo}
+          />
+        )}
       </Container>
       <FormContainer>
-        <Form onSubmit={submitHandler} style={{ marginTop: "1rem" }}>
+        <Form onSubmit={handleSendMessage} style={{ marginTop: "1rem" }}>
           <Form.Group controlId="name">
             <Form.Control
               placeholder="Your response"
@@ -166,4 +116,9 @@ const ChatScreen = ({ location, history }) => {
   );
 };
 
+{
+  /* <Link className="btn btn-dark my-3" to="/messages">
+        Go Back
+      </Link> */
+}
 export default ChatScreen;

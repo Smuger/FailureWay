@@ -55,7 +55,6 @@ export const listServiceDetails = (id) => async (dispatch) => {
   }
 };
 
-
 export const createServiceReport = (serviceId, report) => async (
   dispatch,
   getState
@@ -69,8 +68,7 @@ export const createServiceReport = (serviceId, report) => async (
       userLogin: { userInfo },
     } = getState();
 
-    //console.log("Token I'm sending");
-    //console.log(userInfo.token);
+    
 
     const config = {
       headers: {
@@ -107,10 +105,7 @@ export const createServiceReport = (serviceId, report) => async (
     });
   }
 };
-export const createService =  (newService) => async (
-  dispatch,
-  getState
-) => {
+export const createService = (newService) => async (dispatch, getState) => {
   try {
     dispatch({
       type: SERVICE_CREATE_REQUEST,

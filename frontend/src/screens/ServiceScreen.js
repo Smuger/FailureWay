@@ -21,6 +21,7 @@ const ServiceScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1);
   const [random1or2, setRandom1or2y] = useState(1);
   const [message, setMessage] = useState("");
+  const [test, setTest] = useState("");
   const dispatch = useDispatch();
   const [chartPicked, setChartPicked] = useState("BarChart");
   const [time, setTime] = useState("");
@@ -38,6 +39,44 @@ const ServiceScreen = ({ history, match }) => {
   const serviceDetails = useSelector((state) => state.serviceDetails);
   const { loading, error, service } = serviceDetails;
 
+  const commentHandler = (review) => {
+    if (review.hasOwnProperty("img")) {
+      return (
+        <ListGroup.Item key={review._id}>
+          <Row>
+            <strong>{review.createdAt.substring(0, 10)}</strong>
+          </Row>
+
+          <Row>
+            <span>{review.comment}</span>
+          </Row>
+
+          <Row>
+            <Image src={handleImageCreation({ review })} fluid />
+          </Row>
+        </ListGroup.Item>
+      );
+    } else {
+      if (review.comment !== "") {
+        return (
+          <ListGroup.Item key={review._id}>
+            <Row>
+              <strong>{review.createdAt.substring(0, 10)}</strong>
+            </Row>
+
+            <Row>
+              <span>{review.comment}</span>
+            </Row>
+          </ListGroup.Item>
+        );
+      }
+    }
+  };
+
+  //const loading = false;
+  //const error = "";
+  //const service = { report: [{ test: "" }] };
+
   const wasSLABreached = () => {
     //console.log("wasSLABreached Runninng");
     const breachFound = {
@@ -51,6 +90,7 @@ const ServiceScreen = ({ history, match }) => {
 
     if (service.slaMinor > 0 || service.slaMajor > 0) {
       //console.log("If started");
+      // SERVICE LOOP
       for (let review of service.report) {
         //console.log("service.slaMajor: " + service.slaMajor);
         // check if there is a change for minor or major breach
@@ -131,7 +171,7 @@ const ServiceScreen = ({ history, match }) => {
   };
 
   const messageToSend = {
-    recipient: "",
+    recipient: "60330769f88dad45f85f9f4f",
     message: message,
   };
 
@@ -139,7 +179,8 @@ const ServiceScreen = ({ history, match }) => {
     dispatch(postUserMessage(messageToSend));
     e.preventDefault();
 
-    //console.log("What picked?" + chartPicked);
+    console.log("MESSAGE TO SEND: " + message);
+    history.push("/messages");
   };
 
   const handleImageCreation = ({ review }) => {
@@ -157,10 +198,8 @@ const ServiceScreen = ({ history, match }) => {
   };
 
   useEffect(() => {
-    setRandom1or2y(Math.floor(Math.random() * 10) + 1);
     dispatch(listServiceDetails(match.params.id));
-    wasSLABreached();
-  }, [match, dispatch, time]);
+  }, [match, dispatch, test]);
 
   return (
     <>
@@ -182,6 +221,7 @@ const ServiceScreen = ({ history, match }) => {
                   value={chartPicked}
                   onChange={(e) => setChartPicked(e.target.value)}
                 >
+                  {/** SERVICE MAP */}
                   {services.map((service) => (
                     <option key={service._id} value={service.name}>
                       {service.name}
@@ -202,7 +242,7 @@ const ServiceScreen = ({ history, match }) => {
               {wasSLABreached()}
 
               <ListGroup.Item>
-                <span>Major Downtime Breach at: </span>
+                <span>Major SLA Breach: </span>
                 <strong>
                   {service.slaMajor === 8 ? "Whole Day" : service.slaMajor}
                   {service.slaMajor < 8
@@ -213,7 +253,7 @@ const ServiceScreen = ({ history, match }) => {
                 </strong>
               </ListGroup.Item>
               <ListGroup.Item>
-                <span>Minor Downtime Breach at: </span>
+                <span>Minor SLA Breach: </span>
                 <strong>
                   {service.slaMinor === 8 ? "Whole Day" : service.slaMinor}
                   {service.slaMinor < 8
@@ -246,42 +286,8 @@ const ServiceScreen = ({ history, match }) => {
             <ListGroup variant="flush">
               <h3>Comments:</h3>
               <ListGroup.Item>
-                {service.report.map((review) => (
-                  <>
-                    {/** REVIEW HAS IMAGE */}
-                    {review.hasOwnProperty("img") ? (
-                      <ListGroup.Item key={review._id}>
-                        <Row>
-                          <strong>{review.createdAt.substring(0, 10)}</strong>
-                        </Row>
-
-                        <Row>
-                          <span>{review.comment}</span>
-                        </Row>
-
-                        <Row>
-                          <Image src={handleImageCreation({ review })} fluid />
-                        </Row>
-                      </ListGroup.Item>
-                    ) : (
-                      <>
-                        {review.comment && (
-                          <ListGroup.Item key={review._id}>
-                            <Row>
-                              <strong>
-                                {review.createdAt.substring(0, 10)}
-                              </strong>
-                            </Row>
-
-                            <Row>
-                              <span>{review.comment}</span>
-                            </Row>
-                          </ListGroup.Item>
-                        )}
-                      </>
-                    )}
-                  </>
-                ))}
+                {/** SECOND SERVICE MAP */}
+                {service.report.map((review) => commentHandler(review))}
               </ListGroup.Item>
             </ListGroup>
           </Col>
