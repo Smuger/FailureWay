@@ -182,10 +182,10 @@ const updateMessageDBs = (
       );
       console.log("Pushed");
     } else {
-      user.messageBank.push(conversations);
+      user.messageBank.unshift(conversations);
     }
   } else {
-    user.messageBank.push(conversations);
+    user.messageBank.unshift(conversations);
   }
 };
 

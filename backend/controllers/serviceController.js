@@ -201,11 +201,11 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
     }
     //console.log("newData: " + JSON.stringify(newData));
 
-    service.data.push(newData);
+    service.data.unshift(newData);
     //console.log("newReport: ");
     //console.log(newReport);
 
-    service.report.push(newReport);
+    service.report.unshift(newReport);
 
     let serviceReportLastPosition = service.report.length - 1;
 

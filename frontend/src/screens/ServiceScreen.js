@@ -46,11 +46,9 @@ const ServiceScreen = ({ history, match }) => {
           <Row>
             <strong>{review.createdAt.substring(0, 10)}</strong>
           </Row>
-
           <Row>
-            <span>{review.comment}</span>
+            <p>{review.comment}</p>
           </Row>
-
           <Row>
             <Image src={handleImageCreation({ review })} fluid />
           </Row>
@@ -65,7 +63,7 @@ const ServiceScreen = ({ history, match }) => {
             </Row>
 
             <Row>
-              <span>{review.comment}</span>
+              <p>{review.comment}</p>
             </Row>
           </ListGroup.Item>
         );
@@ -176,11 +174,26 @@ const ServiceScreen = ({ history, match }) => {
   };
 
   const handleSendMessage = (e) => {
-    dispatch(postUserMessage(messageToSend));
     e.preventDefault();
+    if (message.replace(/\s/g, "") !== "") {
+      dispatch(postUserMessage(messageToSend));
 
-    console.log("MESSAGE TO SEND: " + message);
-    history.push("/messages");
+      //console.log("MESSAGE TO SEND: " + message);
+      history.push("/messages");
+    }
+  };
+
+  const handleEnterSendMessage = (e) => {
+    if (e.key === "Enter") {
+      if (!e.shiftKey) {
+        if (message.replace(/\s/g, "") !== "") {
+          dispatch(postUserMessage(messageToSend));
+
+          console.log("MESSAGE TO SEND: " + message);
+          history.push("/messages");
+        }
+      }
+    }
   };
 
   const handleImageCreation = ({ review }) => {
@@ -273,6 +286,7 @@ const ServiceScreen = ({ history, match }) => {
                     onChange={(e) => setMessage(e.target.value)}
                     as="textarea"
                     rows={3}
+                    onKeyPress={handleEnterSendMessage}
                   ></Form.Control>
                 </Form.Group>
 

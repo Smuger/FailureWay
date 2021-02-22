@@ -1,0 +1,5 @@
+X) report issue go to correct service
+X) Sort commets in service from newest
+X) Profile white screen
+X) ChatScreen next line
+5) Chat extra space between comment and image

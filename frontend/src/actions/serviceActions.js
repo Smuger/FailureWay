@@ -68,8 +68,6 @@ export const createServiceReport = (serviceId, report) => async (
       userLogin: { userInfo },
     } = getState();
 
-    
-
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -87,6 +85,7 @@ export const createServiceReport = (serviceId, report) => async (
       type: SERVICE_DOWNTIME_UPDATE_SUCCESS,
       payload: data,
     });
+    dispatch({ type: SERVICE_DETAILS_REQUEST });
     dispatch({
       type: SERVICE_DOWNTIME_UPDATE_RESET,
       payload: data,

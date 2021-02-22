@@ -62,12 +62,30 @@ const ChatScreen = ({ location, history, match }) => {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    dispatch(postUserMessage(messageToSend));
-    setMessage("");
+    if (message.replace(/\s/g, "") !== "") {
+      dispatch(postUserMessage(messageToSend));
+      setMessage("");
 
-    var list = document.getElementById("myDiv");
-    list.scrollTop = list.offsetHeight;
-    console.log("getUserMessages dispatched again");
+      var list = document.getElementById("myDiv");
+      list.scrollTop = list.offsetHeight;
+      console.log("getUserMessages dispatched again");
+    }
+  };
+
+  const handleEnterSendMessage = (e) => {
+    if (e.key === "Enter") {
+      if (!e.shiftKey) {
+        e.preventDefault();
+        if (message.replace(/\s/g, "") !== "") {
+          dispatch(postUserMessage(messageToSend));
+          setMessage("");
+
+          var list = document.getElementById("myDiv");
+          list.scrollTop = list.offsetHeight;
+          console.log("getUserMessages dispatched again");
+        }
+      }
+    }
   };
 
   const letters = {
@@ -96,7 +114,7 @@ const ChatScreen = ({ location, history, match }) => {
         <Col md={{ span: 6, offset: 1 }}>
           <Row>
             <ChatItem
-              alt={"Reactjs"}
+              alt={"Account"}
               title={`${
                 messageBank.messageBank.filter((value) => {
                   return value.recipient === match.params.id;
@@ -105,7 +123,6 @@ const ChatScreen = ({ location, history, match }) => {
               date={""}
               unread={0}
               letterItem={letters}
-              onClick={() => setFirstScreen(false)}
             />
           </Row>
         </Col>
@@ -135,6 +152,7 @@ const ChatScreen = ({ location, history, match }) => {
             <Form.Control
               placeholder="Your response"
               value={message}
+              onKeyPress={handleEnterSendMessage}
               onChange={(e) => setMessage(e.target.value)}
               as="textarea"
               rows={3}

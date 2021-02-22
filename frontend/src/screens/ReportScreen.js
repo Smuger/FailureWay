@@ -43,12 +43,6 @@ const ReportScreen = ({ location, history }) => {
   const sendingDataSuccess = serviceUpdate.success;
   const sendingDataError = serviceUpdate.error;
 
-  const redirect = location.search ? location.search.split("=")[1] : "/";
-
-  if (sendingDataSuccess) {
-    history.push(redirect);
-  }
-
   useEffect(() => {
     dispatch(listServices());
   }, [dispatch, location, history]);
@@ -112,6 +106,8 @@ const ReportScreen = ({ location, history }) => {
           image,
         })
       );
+      console.log(services[0]._id);
+      history.push(`/services/${services[0]._id}`);
     } else {
       dispatch(
         createServiceReport(servicePicked, {
@@ -121,6 +117,8 @@ const ReportScreen = ({ location, history }) => {
           image,
         })
       );
+      console.log(servicePicked);
+      history.push(`/services/${servicePicked}`);
     }
   };
 
