@@ -85,7 +85,7 @@ export const createServiceReport = (serviceId, report) => async (
       type: SERVICE_DOWNTIME_UPDATE_SUCCESS,
       payload: data,
     });
-    dispatch({ type: SERVICE_DETAILS_REQUEST });
+
     dispatch({
       type: SERVICE_DOWNTIME_UPDATE_RESET,
       payload: data,
@@ -101,6 +101,23 @@ export const createServiceReport = (serviceId, report) => async (
     dispatch({
       type: SERVICE_DOWNTIME_UPDATE_FAIL,
       payload: message,
+    });
+  }
+  try {
+    dispatch({ type: SERVICE_DETAILS_REQUEST });
+    const { data } = await axios.get(`/api/services/${serviceId}`);
+
+    dispatch({
+      type: SERVICE_DETAILS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: SERVICE_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
     });
   }
 };
