@@ -35,8 +35,6 @@ const MessagesScreen = ({ location, history }) => {
   const dispatch = useDispatch();
   const submitHandler = () => {};
 
-  const letters = { letter: "sd", id: 1 };
-
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -82,7 +80,14 @@ const MessagesScreen = ({ location, history }) => {
                     }
                     date={new Date()}
                     unread={0}
-                    letterItem={letters}
+                    letterItem={{
+                      letter: conv.recipientName
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toLowerCase(),
+                      id: 1,
+                    }}
                     onClick={() => setFirstScreen(false)}
                   />
                 </Link>
