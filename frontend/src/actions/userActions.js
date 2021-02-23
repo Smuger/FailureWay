@@ -19,7 +19,6 @@ import {
   USER_UPDATE_PROFILE_SUCCESS,
 } from "../constants/userConstants";
 import axios from "axios";
-import { PRODUCT_DETAILS_SUCCESS } from "../constants/productConstants";
 
 export const login = (email, password) => async (dispatch) => {
   try {

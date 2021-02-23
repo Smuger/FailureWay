@@ -5,7 +5,6 @@ import colors from "colors";
 import connectDB from "./config/db.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
-import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
@@ -20,7 +19,6 @@ app.use(express.json());
 
 const __dirname = path.resolve();
 
-app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/upload", uploadRoutes);

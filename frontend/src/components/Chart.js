@@ -69,7 +69,6 @@ const Chart = ({ service, chartPicked }) => {
         <Link to={`/services/${service._id}`}>
           <Card.Text as="h3">{service.name}</Card.Text>
         </Link>
-        <small>No. of reports: {service.report.length}</small>
       </Card.Body>
     </Card>
   );

@@ -1,11 +1,9 @@
 import React, { useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector, connect } from "react-redux";
-import Product from "../components/Product";
 import Chart from "../components/Chart";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-//import { listProducts } from "../actions/productActions";
 import { listServices } from "../actions/serviceActions";
 import SearchBox from "../components/SearchBox";
 
@@ -14,10 +12,8 @@ const HomeScreen = ({ history, match }) => {
 
   const keyword = match.params.keyword;
 
-  //const productList = useSelector((state) => state.productList);
   const serviceList = useSelector((state) => state.serviceList);
-  //const { loading, error, products } = productList;
-  //console.log("LOOK AT" + JSON.stringify(serviceList));
+
   const { loading, error, services } = serviceList;
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -25,10 +21,6 @@ const HomeScreen = ({ history, match }) => {
   const { userInfo } = userLogin;
 
   const redirect = "/login";
-
-  // useEffect(() => {
-  //   dispatch(listProducts());
-  // }, [dispatch]);
 
   useEffect(() => {
     dispatch(listServices(keyword));

@@ -7,15 +7,26 @@ import fs from "fs";
 // @route   GET /api/services
 // @access  Public
 const getServices = asyncHandler(async (req, res) => {
-  const keywordProvider = req.query.keyword
-    ? {
-        provider: {
-          $regex: req.query.keyword,
-          $options: "i",
-        },
-      }
-    : {};
-  let services = await Service.find({ ...keywordProvider });
+  console.log("Keyword: " + req.query.keyword);
+
+  let services = null;
+  if (req.query.keyword !== "") {
+    const keywordProvider = req.query.keyword
+      ? {
+          provider: {
+            $regex: req.query.keyword,
+            $options: "i",
+          },
+        }
+      : {};
+    services = await Service.find({ ...keywordProvider }).lean();
+  } else {
+    services = await Service.find()
+      .select({ _id: 1, name: 1, provider: 1, data: 1 })
+      .lean();
+  }
+  console.log("FOUND ONE");
+  console.log(services);
 
   if (services.length === 0) {
     const keywordName = req.query.keyword
@@ -26,9 +37,21 @@ const getServices = asyncHandler(async (req, res) => {
           },
         }
       : {};
-    services = await Service.find({ ...keywordName });
+    services = await Service.find({ ...keywordName }).lean();
   }
+  console.log("FOUND SECOND");
 
+  // let newServices = [];
+  // services.map((test) => {
+  //   const newService = {
+  //     _id: test._id,
+  //     name: test.name,
+  //     provider: test.provider,
+  //     data: test.data,
+  //   };
+  //   newServices.push(newService);
+  // });
+  // console.log(newServices);
   res.json(services);
 });
 
@@ -67,24 +90,13 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
 
   const { severity, downtime, comment, image } = req.body;
 
-  //console.log(req.body);
-
-  // const imagedata = fs.readFileSync(path.join(__dirname + image), {
-  //   encoding: "base64",
-  // });
   const service = await Service.findById(req.params.id);
-  //console.log("Service to update found: ");
 
-  // Check if report with image
   if (image) {
-    //console.log("Image found");
-    // Get current directory
     const __dirname = path.resolve();
 
-    // get file that was uploaded before
     var imagedata = fs.readFileSync(path.join(__dirname + image));
 
-    // remove that file
     fs.unlink(path.join(__dirname + image), (err) => {
       if (err) {
         console.error(err);
@@ -96,18 +108,12 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
 
     imagedata = imagedata.data;
 
-    // get the image extention
     var imageExt = "image/" + image.split(".")[1];
   }
 
-  //console.log("severity: " + severity);
-
-  // Check is service was found
   if (service) {
-    //console.log("Working on service");
     let sameDay = false;
 
-    // Is there there data from specific day alreay in weekly summary?
     for (let i = 0; i < service.data.length; i++) {
       if (service.data[i].name === dayOfTheWeek) {
         dayNumber = i;
@@ -115,10 +121,6 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
       }
     }
 
-    //console.log("Is this an update to existing data? ");
-    //console.log(sameDay);
-
-    // Update with new data
     if (sameDay) {
       switch (severity) {
         case 0:
@@ -130,7 +132,7 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
           newMinor = service.data[dayNumber].minor;
           break;
       }
-      // remove previous weekly data
+
       service.data.splice(dayNumber, 1);
     } else {
       switch (severity) {
@@ -144,18 +146,6 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
       }
     }
 
-    //console.log("newMinor: ");
-    //console.log(newMinor);
-
-    //console.log("newMajor: ");
-    //console.log(newMajor);
-
-    //console.log("dayOfTheWeek: ");
-    //console.log(dayOfTheWeek);
-
-    //console.log("req.user._id: ");
-    //console.log(req.user._id);
-
     const newData = {
       name: dayOfTheWeek,
       minor: Number(newMinor),
@@ -163,18 +153,7 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
       user: req.user._id,
     };
 
-    //console.log("newData: ");
-    //console.log(newData);
-
     if (image) {
-      //console.log("req.user._id: " + req.user._id);
-      //console.log("severity: " + severity);
-      //console.log("downtime: " + downtime);
-      //console.log("comment: " + comment);
-      //console.log("image: " + image);
-      //console.log("imagedata: " + imagedata);
-      //console.log("imageExt: " + imageExt);
-
       var newReport = {
         user: req.user._id,
         severity: Number(severity),
@@ -187,11 +166,6 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
         },
       };
     } else {
-      //console.log("req.user._id: " + req.user._id);
-      //console.log("severity: " + severity);
-      //console.log("downtime: " + downtime);
-      //console.log("comment: " + comment);
-
       var newReport = {
         user: req.user._id,
         severity: Number(severity),
@@ -199,17 +173,12 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
         comment: comment,
       };
     }
-    //console.log("newData: " + JSON.stringify(newData));
 
     service.data.unshift(newData);
-    //console.log("newReport: ");
-    //console.log(newReport);
 
     service.report.unshift(newReport);
 
     let serviceReportLastPosition = service.report.length - 1;
-
-    //console.log("EVERYTHING IS DONE");
 
     try {
       await service.save();
@@ -217,7 +186,6 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
       console.error("Service failed while saving: " + error);
     }
 
-    //console.log("Failed to save?");
     res.status(201).json({ message: "Service added" });
   } else {
     res.status(404);
