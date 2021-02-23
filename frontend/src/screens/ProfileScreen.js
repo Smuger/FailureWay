@@ -1,9 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  Form,
+  Button,
+  Row,
+  Col,
+  Image,
+  ListGroup,
+  Card,
+} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
+
+import ReviewProfile from "../components/ReviewProfile";
 
 const ProfileScreen = ({ location, history }) => {
   const [name, setName] = useState("");
@@ -11,8 +21,12 @@ const ProfileScreen = ({ location, history }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
+  
 
   const dispatch = useDispatch();
+
+  const userProfile = useSelector((state) => state.userProfile);
+  const { userDetails } = userProfile;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -24,23 +38,30 @@ const ProfileScreen = ({ location, history }) => {
     if (!userInfo) {
       history.push("/login");
     } else {
-      if (!userInfo.name) {
+      if (!userDetails) {
+        console.log("Dispatching getUserDetails");
         dispatch(getUserDetails("profile"));
       } else {
-        setName(userInfo.name);
-        setEmail(userInfo.email);
+        setName(userDetails.name);
+        setEmail(userDetails.email);
       }
     }
-  }, [userInfo, dispatch, history]);
+  }, [userInfo, dispatch, history, userDetails]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setMessage("Passwords do not match");
     } else {
-      dispatch(updateUserProfile({ id: userInfo._id, name, email, password }));
+      dispatch(
+        updateUserProfile({ id: userDetails._id, name, email, password })
+      );
     }
   };
+
+  
+
+  const commentHandler = (review) => {};
 
   return (
     <Row>
@@ -95,7 +116,21 @@ const ProfileScreen = ({ location, history }) => {
           </Button>
         </Form>
       </Col>
-      <Col md={9}>Reported issues:</Col>
+      <Col md={9}>
+        Reported issues:
+        {userDetails && (
+          <ListGroup variant="flush">
+            {userDetails.reportsFromThatUser.length > 0 && (
+              <ListGroup.Item>
+                {/** SECOND SERVICE MAP */}
+                {userDetails.reportsFromThatUser.map((review) => (
+                  <ReviewProfile review={review} />
+                ))}
+              </ListGroup.Item>
+            )}
+          </ListGroup>
+        )}
+      </Col>
     </Row>
   );
 };

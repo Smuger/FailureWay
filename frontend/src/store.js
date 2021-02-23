@@ -19,7 +19,7 @@ import {
 const reducer = combineReducers({
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
-  userDetails: userDetailsReducer,
+  userProfile: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
   userMessages: userMessagesReducer,
   serviceList: serviceListReducer,

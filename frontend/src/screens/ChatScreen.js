@@ -11,6 +11,7 @@ import { animateScroll } from "react-scroll";
 import ScrollDown from "../components/ScrollDown";
 import { ChatItem, MessageBox } from "react-chat-elements";
 //import io from "socket.io-client";
+import Loader from "../components/Loader";
 
 const useInterval = (callback, delay) => {
   const savedCallback = useRef();
@@ -141,19 +142,23 @@ const ChatScreen = ({ location, history, match }) => {
     <>
       {messageBank && (
         <Col md={{ span: 6, offset: 1 }}>
-          <Row>
-            <ChatItem
-              alt={"Account"}
-              title={`${
-                messageBank.messageBank.filter((value) => {
-                  return value.recipient === match.params.id;
-                })[0].recipientName
-              }`}
-              date={""}
-              unread={0}
-              letterItem={letters}
-            />
-          </Row>
+          {loading ? (
+            <Loader />
+          ) : (
+            <Row>
+              <ChatItem
+                alt={"Account"}
+                title={`${
+                  messageBank.messageBank.filter((value) => {
+                    return value.recipient === match.params.id;
+                  })[0].recipientName
+                }`}
+                date={""}
+                unread={0}
+                letterItem={letters}
+              />
+            </Row>
+          )}
         </Col>
       )}
       <Container

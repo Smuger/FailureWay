@@ -65,7 +65,10 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route GET /api/users/profile
 // @access PRIVATE
 const getUserProfile = asyncHandler(async (req, res) => {
+  console.log("RUNNING getUserProfile");
   const user = await User.findById(req.user._id);
+
+  console.log(user.reportsFromThatUser);
 
   if (user) {
     res.json({
@@ -73,6 +76,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      reportsFromThatUser: user.reportsFromThatUser,
     });
   } else {
     res.status(404);

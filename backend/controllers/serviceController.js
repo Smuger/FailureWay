@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Service from "../models/serviceModel.js";
+import User from "../models/userModel.js";
 import path from "path";
 import fs from "fs";
 
@@ -77,6 +78,10 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
   const { severity, downtime, comment, image } = req.body;
 
   const service = await Service.findById(req.params.id);
+
+  const reportingUser = await User.findById(req.user._id);
+
+  console.log(reportingUser);
 
   if (image) {
     const __dirname = path.resolve();
@@ -164,10 +169,20 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
 
     service.report.unshift(newReport);
 
+    newReport.name = service.name;
+    newReport.provider = service.provider;
+
+    console.log(newReport);
+
+    reportingUser.reportsFromThatUser.unshift(newReport);
+
+    console.log("AFTER UNSHIFT");
+
     let serviceReportLastPosition = service.report.length - 1;
 
     try {
       await service.save();
+      await reportingUser.save();
     } catch (error) {
       console.error("Service failed while saving: " + error);
     }

@@ -18,6 +18,7 @@ import { postUserMessage } from "../actions/userActions";
 import ReactLazyLoad from "../components/ReactLazyLoad";
 import { Controlled as ControlledZoom } from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
+import Review from "../components/Review";
 
 const ServiceScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1);
@@ -33,8 +34,12 @@ const ServiceScreen = ({ history, match }) => {
     setIsZoomed(true);
   }, []);
 
+  // const handleZoomChange = useCallback((shouldZoom) => {
+  //   setIsZoomed(shouldZoom);
+  // }, []);
+
   const handleZoomChange = useCallback((shouldZoom) => {
-    setIsZoomed(shouldZoom);
+    console.log(shouldZoom);
   }, []);
 
   const services = [
@@ -316,7 +321,9 @@ const ServiceScreen = ({ history, match }) => {
               <h3>Comments:</h3>
               <ListGroup.Item>
                 {/** SECOND SERVICE MAP */}
-                {service.report.map((review) => commentHandler(review))}
+                {service.report.map((review) => (
+                  <Review review={review} />
+                ))}
               </ListGroup.Item>
             </ListGroup>
           </Col>

@@ -7,6 +7,7 @@ import FormContainer from "../components/FormContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserMessages } from "../actions/userActions";
 import { Link } from "react-router-dom";
+import Loader from "../components/Loader";
 
 const useInterval = (callback, delay) => {
   const savedCallback = useRef();
@@ -53,50 +54,54 @@ const MessagesScreen = ({ location, history }) => {
   return (
     <>
       <Container style={{ overflowY: "scroll", height: "70vh" }}>
-        <Row>
-          {messageBank !== undefined &&
-            messageBank.messageBank.length === 0 &&
-            messageBank.messageBank.length === 0 && (
+        {loading ? (
+          <Loader />
+        ) : (
+          <Row>
+            {messageBank !== undefined &&
+              messageBank.messageBank.length === 0 &&
+              messageBank.messageBank.length === 0 && (
+                <h1>You have no messages</h1>
+              )}
+            {messageBank !== undefined ? (
+              messageBank.messageBank.map((conv) => (
+                <Col
+                  md={{ span: 6, offset: 3 }}
+                  style={{ backgroundColor: "#FFC100" }}
+                  key={conv._id}
+                >
+                  <Link
+                    to={`/messages/${conv.recipient}`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <ChatItem
+                      alt={"Reactjs"}
+                      title={`${conv.recipientName}`}
+                      subtitle={
+                        conv.messagesForThatUser[
+                          conv.messagesForThatUser.length - 1
+                        ].message
+                      }
+                      date={new Date(conv.updatedAt)}
+                      unread={0}
+                      letterItem={{
+                        letter: conv.recipientName
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .toLowerCase(),
+                        id: 1,
+                      }}
+                      onClick={() => setFirstScreen(false)}
+                    />
+                  </Link>
+                </Col>
+              ))
+            ) : (
               <h1>You have no messages</h1>
             )}
-          {messageBank !== undefined ? (
-            messageBank.messageBank.map((conv) => (
-              <Col
-                md={{ span: 6, offset: 3 }}
-                style={{ backgroundColor: "#FFC100" }}
-                key={conv._id}
-              >
-                <Link
-                  to={`/messages/${conv.recipient}`}
-                  style={{ textDecoration: "none" }}
-                >
-                  <ChatItem
-                    alt={"Reactjs"}
-                    title={`${conv.recipientName}`}
-                    subtitle={
-                      conv.messagesForThatUser[
-                        conv.messagesForThatUser.length - 1
-                      ].message
-                    }
-                    date={new Date(conv.updatedAt)}
-                    unread={0}
-                    letterItem={{
-                      letter: conv.recipientName
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")
-                        .toLowerCase(),
-                      id: 1,
-                    }}
-                    onClick={() => setFirstScreen(false)}
-                  />
-                </Link>
-              </Col>
-            ))
-          ) : (
-            <h1>You have no messages</h1>
-          )}
-        </Row>
+          </Row>
+        )}
       </Container>
     </>
   );

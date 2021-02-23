@@ -23,6 +23,34 @@ const messageSchema = mongoose.Schema(
   }
 );
 
+const reportSchema = mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    severity: { type: Number, required: true },
+    downtime: { type: Number, required: true },
+    comment: { type: String },
+    desc: { type: String },
+    img: {
+      data: Buffer,
+      contentType: String,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    provider: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 const conversationsSchema = mongoose.Schema(
   {
     recipient: {
@@ -62,6 +90,7 @@ const userSchema = mongoose.Schema(
       default: false,
     },
     messageBank: [conversationsSchema],
+    reportsFromThatUser: [reportSchema],
   },
   {
     timestamps: true,

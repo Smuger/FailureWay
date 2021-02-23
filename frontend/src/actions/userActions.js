@@ -99,6 +99,7 @@ export const logout = () => (dispatch) => {
 };
 
 export const getUserDetails = (id) => async (dispatch, getState) => {
+  console.log("ACTION GET USER DETAILS");
   try {
     dispatch({
       type: USER_DETAILS_REQUEST,
