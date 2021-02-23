@@ -2,6 +2,10 @@ import generateToken from "../utils/generateToken.js";
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 
+// I cant use require natively from ESM
+import { createRequire } from "module";
+import express from "express";
+
 // @desc Auth user & get token
 // @route POST /api/users/login
 // @access Public
@@ -74,6 +78,20 @@ const getUserProfile = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("User not found");
   }
+});
+
+const require = createRequire(import.meta.url);
+const http = require("http").createServer(express);
+const io = require("socket.io")(http);
+
+http.listen(4000, () => {
+  console.log("listening on port 4000");
+});
+
+io.on("connection", (socket) => {
+  socket.on("message", ({ name, message }) => {
+    io.emit("message", { name, message });
+  });
 });
 
 // @desc Get user profile

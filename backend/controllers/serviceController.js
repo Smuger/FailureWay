@@ -25,8 +25,6 @@ const getServices = asyncHandler(async (req, res) => {
       .select({ _id: 1, name: 1, provider: 1, data: 1 })
       .lean();
   }
-  console.log("FOUND ONE");
-  console.log(services);
 
   if (services.length === 0) {
     const keywordName = req.query.keyword
@@ -39,19 +37,7 @@ const getServices = asyncHandler(async (req, res) => {
       : {};
     services = await Service.find({ ...keywordName }).lean();
   }
-  console.log("FOUND SECOND");
 
-  // let newServices = [];
-  // services.map((test) => {
-  //   const newService = {
-  //     _id: test._id,
-  //     name: test.name,
-  //     provider: test.provider,
-  //     data: test.data,
-  //   };
-  //   newServices.push(newService);
-  // });
-  // console.log(newServices);
   res.json(services);
 });
 

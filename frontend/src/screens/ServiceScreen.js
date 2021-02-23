@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,6 +16,8 @@ import Chart from "../components/Chart";
 import { listServiceDetails } from "../actions/serviceActions";
 import { postUserMessage } from "../actions/userActions";
 import ReactLazyLoad from "../components/ReactLazyLoad";
+import { Controlled as ControlledZoom } from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
 
 const ServiceScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1);
@@ -25,6 +27,15 @@ const ServiceScreen = ({ history, match }) => {
   const dispatch = useDispatch();
   const [chartPicked, setChartPicked] = useState("BarChart");
   const [time, setTime] = useState("");
+  const [isZoomed, setIsZoomed] = useState(false);
+
+  const handleImgLoad = useCallback(() => {
+    setIsZoomed(true);
+  }, []);
+
+  const handleZoomChange = useCallback((shouldZoom) => {
+    setIsZoomed(shouldZoom);
+  }, []);
 
   const services = [
     { _id: "1", name: "BarChart" },
@@ -49,8 +60,11 @@ const ServiceScreen = ({ history, match }) => {
           <Row>
             <p>{review.comment}</p>
           </Row>
+
           <Row>
-            <Image src={handleImageCreation({ review })} fluid />
+            <ControlledZoom isZoomed={isZoomed} onZoomChange={handleZoomChange}>
+              <Image src={handleImageCreation({ review })} fluid />
+            </ControlledZoom>
           </Row>
         </ListGroup.Item>
       );
