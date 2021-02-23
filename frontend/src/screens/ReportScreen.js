@@ -218,6 +218,7 @@ const ReportScreen = ({ location, history }) => {
         <Form.Group controlId="comment">
           <Form.Label>Comment</Form.Label>
           <Form.Control
+          style={{minHeight: "90px"}}
             placeholder="Describe how this downtime affected you"
             value={comment}
             onChange={(e) => setComment(e.target.value)}

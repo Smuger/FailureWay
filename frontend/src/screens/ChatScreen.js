@@ -179,6 +179,7 @@ const ChatScreen = ({ location, history, match }) => {
         <Form onSubmit={handleSendMessage} style={{ marginTop: "1rem" }}>
           <Form.Group controlId="name">
             <Form.Control
+              style={{ minHeight: "90px" }}
               placeholder="Your response"
               value={message}
               onKeyPress={handleEnterSendMessage}

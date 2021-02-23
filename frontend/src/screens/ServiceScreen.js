@@ -295,6 +295,7 @@ const ServiceScreen = ({ history, match }) => {
                 <Form.Group controlId="comment">
                   <Form.Label>Send message</Form.Label>
                   <Form.Control
+                    style={{ minHeight: "90px" }}
                     placeholder="Your message..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}

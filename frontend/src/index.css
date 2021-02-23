@@ -8,10 +8,6 @@ p {
     sans-serif !important;
 }
 
-.form-control {
-  min-height: 90px;
-}
-
 .container::-webkit-scrollbar {
   display: none;
 }
