@@ -8,7 +8,6 @@ import fs from "fs";
 // @route   GET /api/services
 // @access  Public
 const getServices = asyncHandler(async (req, res) => {
-  console.log("Keyword: " + req.query.keyword);
 
   let services = null;
   if (req.query.keyword !== "") {
@@ -80,8 +79,6 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
   const service = await Service.findById(req.params.id);
 
   const reportingUser = await User.findById(req.user._id);
-
-  console.log(reportingUser);
 
   if (image) {
     const __dirname = path.resolve();
@@ -172,11 +169,7 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
     newReport.name = service.name;
     newReport.provider = service.provider;
 
-    console.log(newReport);
-
     reportingUser.reportsFromThatUser.unshift(newReport);
-
-    console.log("AFTER UNSHIFT");
 
     let serviceReportLastPosition = service.report.length - 1;
 

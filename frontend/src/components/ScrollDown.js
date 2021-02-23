@@ -17,9 +17,6 @@ const ScrollDown = ({ messages, userInfo }) => {
         <Row key={conv._id}>
           {conv.recipient === userInfo._id ? (
             <Col md={{ span: 5, offset: 1 }}>
-              {console.log("Look at me")}
-              {console.log(userInfo._id)}
-              {console.log(conv.recipient)}
               <MessageBox
                 position={"left"}
                 type={"text"}
@@ -30,9 +27,6 @@ const ScrollDown = ({ messages, userInfo }) => {
             </Col>
           ) : (
             <Col md={{ span: 5, offset: 6 }}>
-              {console.log("Look at me")}
-              {console.log(userInfo._id)}
-              {console.log(conv.recipient)}
               <MessageBox
                 position={"right"}
                 type={"text"}

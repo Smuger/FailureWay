@@ -3,6 +3,7 @@ import {
   SERVICE_CREATE_REQUEST,
   SERVICE_CREATE_SUCCESS,
   SERVICE_DETAILS_FAIL,
+  SERVICE_DETAILS_FLUSH,
   SERVICE_DETAILS_REQUEST,
   SERVICE_DETAILS_SUCCESS,
   SERVICE_DOWNTIME_UPDATE_FAIL,
@@ -53,6 +54,8 @@ export const serviceDetailsReducer = (
       return { loading: false, service: action.payload };
     case SERVICE_DETAILS_FAIL:
       return { loading: false, error: action.payload };
+    case SERVICE_DETAILS_FLUSH:
+      return {};
     default:
       return state;
   }

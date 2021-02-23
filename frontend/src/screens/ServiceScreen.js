@@ -34,14 +34,6 @@ const ServiceScreen = ({ history, match }) => {
     setIsZoomed(true);
   }, []);
 
-  // const handleZoomChange = useCallback((shouldZoom) => {
-  //   setIsZoomed(shouldZoom);
-  // }, []);
-
-  const handleZoomChange = useCallback((shouldZoom) => {
-    console.log(shouldZoom);
-  }, []);
-
   const services = [
     { _id: "1", name: "BarChart" },
     { _id: "2", name: "AreaChart" },
@@ -55,70 +47,26 @@ const ServiceScreen = ({ history, match }) => {
   const serviceDetails = useSelector((state) => state.serviceDetails);
   const { loading, error, service } = serviceDetails;
 
-  const commentHandler = (review) => {
-    if (review.hasOwnProperty("img")) {
-      return (
-        <ListGroup.Item key={review._id}>
-          <Row>
-            <strong>{review.createdAt.substring(0, 10)}</strong>
-          </Row>
-          <Row>
-            <p>{review.comment}</p>
-          </Row>
-
-          <Row>
-            <ControlledZoom isZoomed={isZoomed} onZoomChange={handleZoomChange}>
-              <Image src={handleImageCreation({ review })} fluid />
-            </ControlledZoom>
-          </Row>
-        </ListGroup.Item>
-      );
-    } else {
-      if (review.comment !== "") {
-        return (
-          <ListGroup.Item key={review._id}>
-            <Row>
-              <strong>{review.createdAt.substring(0, 10)}</strong>
-            </Row>
-
-            <Row>
-              <p>{review.comment}</p>
-            </Row>
-          </ListGroup.Item>
-        );
-      }
-    }
-  };
-
-  //const loading = false;
-  //const error = "";
-  //const service = { report: [{ test: "" }] };
-
   const wasSLABreached = () => {
-    //console.log("wasSLABreached Runninng");
+
     const breachFound = {
       date: null,
       type: null,
       time: null,
     };
 
-    //console.log("Time before: " + service.slaMajor);
-    //console.log("Time before: " + service.slaMinor);
-
     if (service.slaMinor > 0 || service.slaMajor > 0) {
-      //console.log("If started");
+
       // SERVICE LOOP
       for (let review of service.report) {
-        //console.log("service.slaMajor: " + service.slaMajor);
-        // check if there is a change for minor or major breach
+
         if (review.downtime > Math.max(service.slaMinor, service.slaMajor)) {
-          //console.log("In order");
-          //console.log("Severity: " + review.severity);
+
           // major
           if (review.severity > 0) {
-            //console.log("Major severity");
+
             if (review.downtime > service.slaMajor) {
-              //console.log("Time found: " + review.createdAt);
+
               breachFound.date = new Date(review.createdAt).toString();
 
               breachFound.type = "Major";
@@ -147,7 +95,6 @@ const ServiceScreen = ({ history, match }) => {
           // minor
           else {
             if (review.downtime > service.slaMinor) {
-              //console.log("Time found: " + review.createdAt);
 
               breachFound.date = new Date(review.createdAt).toString();
               breachFound.type = "Minor";
@@ -197,7 +144,6 @@ const ServiceScreen = ({ history, match }) => {
     if (message.replace(/\s/g, "") !== "") {
       dispatch(postUserMessage(messageToSend));
 
-      //console.log("MESSAGE TO SEND: " + message);
       history.push("/messages");
     }
   };
@@ -207,8 +153,6 @@ const ServiceScreen = ({ history, match }) => {
       if (!e.shiftKey) {
         if (message.replace(/\s/g, "") !== "") {
           dispatch(postUserMessage(messageToSend));
-
-          console.log("MESSAGE TO SEND: " + message);
           history.push("/messages");
         }
       }
@@ -216,11 +160,6 @@ const ServiceScreen = ({ history, match }) => {
   };
 
   const handleImageCreation = ({ review }) => {
-    //console.log("handleImageCreation");
-    //console.log(review);
-    //console.log("img size");
-    //console.log(review.img.naturalWidth);
-    //console.log(review.img.naturalHeight);
 
     let base64Flag = `data:${review.img.contentType};base64,`;
     let imageStr = arrayBufferToBase64(review.img.data.data);

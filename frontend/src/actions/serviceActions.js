@@ -12,6 +12,7 @@ import {
   SERVICE_CREATE_REQUEST,
   SERVICE_CREATE_FAIL,
   SERVICE_CREATE_SUCCESS,
+  SERVICE_DETAILS_FLUSH,
 } from "../constants/serviceConstants";
 import axios from "axios";
 import { logout } from "./userActions";
@@ -37,6 +38,7 @@ export const listServices = (keyword = "") => async (dispatch) => {
 
 export const listServiceDetails = (id) => async (dispatch) => {
   try {
+    dispatch({ type: SERVICE_DETAILS_FLUSH });
     dispatch({ type: SERVICE_DETAILS_REQUEST });
     const { data } = await axios.get(`/api/services/${id}`);
 

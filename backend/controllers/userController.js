@@ -65,10 +65,7 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route GET /api/users/profile
 // @access PRIVATE
 const getUserProfile = asyncHandler(async (req, res) => {
-  console.log("RUNNING getUserProfile");
   const user = await User.findById(req.user._id);
-
-  console.log(user.reportsFromThatUser);
 
   if (user) {
     res.json({
@@ -83,20 +80,6 @@ const getUserProfile = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 });
-
-// const require = createRequire(import.meta.url);
-// const http = require("http").createServer(express);
-// const io = require("socket.io")(http);
-
-// http.listen(4000, () => {
-//   console.log("listening on port 4000");
-// });
-
-// io.on("connection", (socket) => {
-//   socket.on("message", ({ name, message }) => {
-//     io.emit("message", { name, message });
-//   });
-// });
 
 // @desc Get user profile
 // @route GET /api/users/messages
@@ -120,20 +103,11 @@ const getUserMessages = asyncHandler(async (req, res) => {
 const postUserMessage = asyncHandler(async (req, res) => {
   const { recipient, message } = req.body;
 
-  console.log("Server recived: " + recipient + " " + message);
-
   // Sender db object
   const user = await User.findOne(req.user._id);
 
-  console.log(user);
-  console.log("user found");
   // Reciepient db object
   const user2 = await User.findById(recipient);
-
-  console.log(user2);
-  console.log("recipient found");
-
-  console.log("USERS FOUND");
 
   // Sender Array message
   const messageArray = {
@@ -141,8 +115,6 @@ const postUserMessage = asyncHandler(async (req, res) => {
     sender: req.user._id,
     message: message,
   };
-
-  console.log("ARRAY MESSAGE DONE");
 
   // Sender Conversation
   let conversations = {
@@ -158,17 +130,12 @@ const postUserMessage = asyncHandler(async (req, res) => {
     recipientName: req.user.name,
   };
 
-  console.log("CONVERSATIONS DONE");
-
   updateMessageDBs(user, recipient, message, conversations, messageArray);
-  console.log("FIST FUNCTION DONE");
   updateMessageDBs(user2, req.user._id, message, conversations2, messageArray);
-  console.log("SECOND FUNCTION DONE");
 
   try {
     await user.save();
     await user2.save();
-    console.log("Message saved");
     res.status(201).json({ message: "Message sent" });
   } catch (error) {
     console.error("Unable to send message: " + error);
@@ -185,23 +152,18 @@ const updateMessageDBs = (
   messageArray
 ) => {
   let conversationPosition = null;
-  console.log(user.messageBank.length);
+
   if (user.messageBank.length > 0) {
     for (let i = 0; i < user.messageBank.length; i++) {
-      console.log(user.messageBank[i].recipient);
-      console.log(recipient);
       if (user.messageBank[i].recipient.equals(recipient)) {
-        console.log("Conversation found");
         conversationPosition = i;
         break;
       }
     }
     if (conversationPosition !== null) {
-      console.log("Converstation already exist.");
       user.messageBank[conversationPosition].messagesForThatUser.push(
         messageArray
       );
-      console.log("Pushed");
     } else {
       user.messageBank.unshift(conversations);
     }

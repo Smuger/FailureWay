@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
-
 import ReviewProfile from "../components/ReviewProfile";
 
 const ProfileScreen = ({ location, history }) => {
@@ -21,12 +20,11 @@ const ProfileScreen = ({ location, history }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
-  
 
   const dispatch = useDispatch();
 
   const userProfile = useSelector((state) => state.userProfile);
-  const { userDetails } = userProfile;
+  const { userDetails, loading } = userProfile;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -39,7 +37,6 @@ const ProfileScreen = ({ location, history }) => {
       history.push("/login");
     } else {
       if (!userDetails) {
-        console.log("Dispatching getUserDetails");
         dispatch(getUserDetails("profile"));
       } else {
         setName(userDetails.name);
@@ -58,8 +55,6 @@ const ProfileScreen = ({ location, history }) => {
       );
     }
   };
-
-  
 
   const commentHandler = (review) => {};
 
@@ -118,15 +113,21 @@ const ProfileScreen = ({ location, history }) => {
       </Col>
       <Col md={9}>
         Reported issues:
-        {userDetails && (
+        {loading ? (
+          <Loader />
+        ) : (
           <ListGroup variant="flush">
-            {userDetails.reportsFromThatUser.length > 0 && (
-              <ListGroup.Item>
-                {/** SECOND SERVICE MAP */}
-                {userDetails.reportsFromThatUser.map((review) => (
-                  <ReviewProfile review={review} />
-                ))}
-              </ListGroup.Item>
+            {userDetails ? (
+              userDetails.reportsFromThatUser.length > 0 && (
+                <ListGroup.Item>
+                  {/** SECOND SERVICE MAP */}
+                  {userDetails.reportsFromThatUser.map((review) => (
+                    <ReviewProfile review={review} />
+                  ))}
+                </ListGroup.Item>
+              )
+            ) : (
+              <h1>No reported issues</h1>
             )}
           </ListGroup>
         )}

@@ -27,7 +27,6 @@ const Chart = ({ service, chartPicked }) => {
   }
 
   const choosenChart = () => {
-    //console.log(chartPicked);
     switch (chartPicked) {
       case "BarChart":
         return <BarChartComponent service={service} />;

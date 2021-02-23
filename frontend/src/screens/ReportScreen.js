@@ -48,9 +48,9 @@ const ReportScreen = ({ location, history }) => {
   }, [dispatch, location, history]);
 
   const imageUploadHandler = async (picture) => {
-    //console.log(picture[0]);
+
     const file = picture[0];
-    //console.log(picture);
+
     const formData = new FormData();
     formData.append("image", file);
     setUploading(true);
@@ -106,7 +106,7 @@ const ReportScreen = ({ location, history }) => {
           image,
         })
       );
-      console.log(services[0]._id);
+
       history.push(`/services/${services[0]._id}`);
     } else {
       dispatch(
@@ -117,7 +117,6 @@ const ReportScreen = ({ location, history }) => {
           image,
         })
       );
-      console.log(servicePicked);
       history.push(`/services/${servicePicked}`);
     }
   };

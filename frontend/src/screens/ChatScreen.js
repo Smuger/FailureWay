@@ -67,15 +67,10 @@ const ChatScreen = ({ location, history, match }) => {
   const userMessages = useSelector((state) => state.userMessages);
   const { loading, success, messageBank } = userMessages;
 
-  console.log("MATCH PARAM");
-  console.log(match.params.id);
-
   if (messageBank) {
     let test = messageBank.messageBank.filter((value) => {
       return value._id === match.params.id;
     });
-    console.log("filter test");
-    console.log(test);
   }
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -98,7 +93,6 @@ const ChatScreen = ({ location, history, match }) => {
 
       var list = document.getElementById("myDiv");
       list.scrollTop = list.offsetHeight;
-      console.log("getUserMessages dispatched again");
     }
   };
 
@@ -112,7 +106,6 @@ const ChatScreen = ({ location, history, match }) => {
 
           var list = document.getElementById("myDiv");
           list.scrollTop = list.offsetHeight;
-          console.log("getUserMessages dispatched again");
         }
       }
     }

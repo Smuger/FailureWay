@@ -7,9 +7,9 @@ const ImageUpload = (props) => {
   const [uploading, setUploading] = useState(false);
 
   const uploadFileHandler = async (picture) => {
-    //console.log(picture[0]);
+
     const file = picture[0];
-    //console.log(picture);
+
     const formData = new FormData();
     formData.append("image", file);
     setUploading(true);

@@ -1,5 +1,6 @@
 import {
   USER_DETAILS_FAIL,
+  USER_DETAILS_FLUSH,
   USER_DETAILS_REQUEST,
   USER_DETAILS_SUCCESS,
   USER_LOGIN_FAIL,
@@ -96,10 +97,10 @@ export const register = (name, email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGOUT });
+  dispatch({ type: USER_DETAILS_FLUSH });
 };
 
 export const getUserDetails = (id) => async (dispatch, getState) => {
-  console.log("ACTION GET USER DETAILS");
   try {
     dispatch({
       type: USER_DETAILS_REQUEST,
@@ -141,12 +142,6 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     const {
       userLogin: { userInfo },
     } = getState();
-
-    //console.log("THIS IS TOKEN: " + userInfo.token);
-    //console.log("THIS IS USER: " + user.name);
-    //console.log("THIS IS USER: " + user.id);
-    //console.log("THIS IS USER: " + user.password);
-    //console.log("THIS IS USER: " + user.email);
 
     const config = {
       headers: {
@@ -216,10 +211,6 @@ export const postUserMessage = (messageToSend) => async (
     const {
       userLogin: { userInfo },
     } = getState();
-
-    console.log("Token I'm sending");
-    console.log(userInfo.token);
-    console.log(messageToSend);
 
     const config = {
       headers: {

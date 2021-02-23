@@ -1,5 +1,6 @@
 import {
   USER_DETAILS_FAIL,
+  USER_DETAILS_FLUSH,
   USER_DETAILS_REQUEST,
   USER_DETAILS_SUCCESS,
   USER_LOGIN_FAIL,
@@ -82,6 +83,8 @@ export const userDetailsReducer = (state = { user: {} }, action) => {
       return { loading: false, success: true, userDetails: action.payload };
     case USER_DETAILS_FAIL:
       return { loading: false, error: action.payload };
+    case USER_DETAILS_FLUSH:
+      return {};
     default:
       return state;
   }
