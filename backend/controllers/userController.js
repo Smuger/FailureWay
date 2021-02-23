@@ -3,8 +3,8 @@ import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 
 // I cant use require natively from ESM
-import { createRequire } from "module";
-import express from "express";
+//import { createRequire } from "module";
+//import express from "express";
 
 // @desc Auth user & get token
 // @route POST /api/users/login
@@ -80,19 +80,19 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-const require = createRequire(import.meta.url);
-const http = require("http").createServer(express);
-const io = require("socket.io")(http);
+// const require = createRequire(import.meta.url);
+// const http = require("http").createServer(express);
+// const io = require("socket.io")(http);
 
-http.listen(4000, () => {
-  console.log("listening on port 4000");
-});
+// http.listen(4000, () => {
+//   console.log("listening on port 4000");
+// });
 
-io.on("connection", (socket) => {
-  socket.on("message", ({ name, message }) => {
-    io.emit("message", { name, message });
-  });
-});
+// io.on("connection", (socket) => {
+//   socket.on("message", ({ name, message }) => {
+//     io.emit("message", { name, message });
+//   });
+// });
 
 // @desc Get user profile
 // @route GET /api/users/messages

@@ -10,7 +10,7 @@ import { getUserMessages, postUserMessage } from "../actions/userActions";
 import { animateScroll } from "react-scroll";
 import ScrollDown from "../components/ScrollDown";
 import { ChatItem, MessageBox } from "react-chat-elements";
-import io from "socket.io-client";
+//import io from "socket.io-client";
 
 const useInterval = (callback, delay) => {
   const savedCallback = useRef();
@@ -29,37 +29,37 @@ const useInterval = (callback, delay) => {
   }, [delay]);
 };
 
-const socket = io.connect("http://localhost:4000");
+//const socket = io.connect("http://localhost:4000");
 
 const ChatScreen = ({ location, history, match }) => {
   const [message, setMessage] = useState("");
   const [firstScreen, setFirstScreen] = useState(true);
 
-  const [state, setState] = useState({ message: "", name: "" });
-  const [chat, setChat] = useState([]);
+  // const [state, setState] = useState({ message: "", name: "" });
+  // const [chat, setChat] = useState([]);
 
-  const renderChat = () => {
-    return chat.map(({ name, message }, index) => (
-      <div key={index}>
-        <h3>
-          {name} and {message}
-        </h3>
-      </div>
-    ));
-  };
+  // const renderChat = () => {
+  //   return chat.map(({ name, message }, index) => (
+  //     <div key={index}>
+  //       <h3>
+  //         {name} and {message}
+  //       </h3>
+  //     </div>
+  //   ));
+  // };
 
-  useEffect(() => {
-    socket.on("message", ({ name, message }) => {
-      setChat([...chat, { name, message }]);
-    });
-  });
+  // useEffect(() => {
+  //   socket.on("message", ({ name, message }) => {
+  //     setChat([...chat, { name, message }]);
+  //   });
+  // });
 
-  const messageSubmit = (e) => {
-    e.preventDefault();
-    const { name, message } = state;
-    socket.emit("message", { name, message });
-    setState({ message: "", name });
-  };
+  // const messageSubmit = (e) => {
+  //   e.preventDefault();
+  //   const { name, message } = state;
+  //   socket.emit("message", { name, message });
+  //   setState({ message: "", name });
+  // };
 
   const dispatch = useDispatch();
 

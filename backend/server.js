@@ -8,8 +8,6 @@ import userRoutes from "./routes/userRoutes.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 
-
-
 dotenv.config();
 
 connectDB();
@@ -57,5 +55,3 @@ const server = app.listen(
     )}`.yellow.bold
   )
 );
-
-//const io = socket(server);
