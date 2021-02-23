@@ -78,7 +78,7 @@ const MessagesScreen = ({ location, history }) => {
                         conv.messagesForThatUser.length - 1
                       ].message
                     }
-                    date={new Date()}
+                    date={new Date(conv.updatedAt)}
                     unread={0}
                     letterItem={{
                       letter: conv.recipientName
