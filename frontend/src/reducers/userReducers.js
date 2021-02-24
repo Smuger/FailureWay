@@ -62,7 +62,7 @@ export const userMessagesReducer = (state = {}, action) => {
   }
 };
 
-export const userSendMessage = (state = {}, action) => {
+export const userSendMessageReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_SEND_MESSAGE_REQUEST:
       return { loading: true, success: false };

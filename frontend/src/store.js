@@ -14,6 +14,7 @@ import {
   userDetailsReducer,
   userUpdateProfileReducer,
   userMessagesReducer,
+  userSendMessageReducer,
 } from "./reducers/userReducers";
 
 const reducer = combineReducers({
@@ -22,6 +23,7 @@ const reducer = combineReducers({
   userProfile: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
   userMessages: userMessagesReducer,
+  userSendMessage: userSendMessageReducer,
   serviceList: serviceListReducer,
   serviceDetails: serviceDetailsReducer,
   serviceUpdate: updateServiceDowntimeReducer,

@@ -47,8 +47,10 @@ const ServiceScreen = ({ history, match }) => {
   const serviceDetails = useSelector((state) => state.serviceDetails);
   const { loading, error, service } = serviceDetails;
 
-  const wasSLABreached = () => {
+  const userSendMessage = useSelector((state) => state.userSendMessage);
+  const sendMessageLoading = userSendMessage.loading;
 
+  const wasSLABreached = () => {
     const breachFound = {
       date: null,
       type: null,
@@ -56,17 +58,12 @@ const ServiceScreen = ({ history, match }) => {
     };
 
     if (service.slaMinor > 0 || service.slaMajor > 0) {
-
       // SERVICE LOOP
       for (let review of service.report) {
-
         if (review.downtime > Math.max(service.slaMinor, service.slaMajor)) {
-
           // major
           if (review.severity > 0) {
-
             if (review.downtime > service.slaMajor) {
-
               breachFound.date = new Date(review.createdAt).toString();
 
               breachFound.type = "Major";
@@ -95,7 +92,6 @@ const ServiceScreen = ({ history, match }) => {
           // minor
           else {
             if (review.downtime > service.slaMinor) {
-
               breachFound.date = new Date(review.createdAt).toString();
               breachFound.type = "Minor";
               breachFound.time = review.downtime;
@@ -160,7 +156,6 @@ const ServiceScreen = ({ history, match }) => {
   };
 
   const handleImageCreation = ({ review }) => {
-
     let base64Flag = `data:${review.img.contentType};base64,`;
     let imageStr = arrayBufferToBase64(review.img.data.data);
     let img = "";
@@ -248,10 +243,13 @@ const ServiceScreen = ({ history, match }) => {
                     onKeyPress={handleEnterSendMessage}
                   ></Form.Control>
                 </Form.Group>
-
-                <Button type="submit" variant="primary" disabled={false}>
-                  Send
-                </Button>
+                {sendMessageLoading ? (
+                  <Loader />
+                ) : (
+                  <Button type="submit" variant="primary" disabled={false}>
+                    Send
+                  </Button>
+                )}
               </Form>
             </ListGroup>
           </Col>

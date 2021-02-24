@@ -91,7 +91,7 @@ const getUserMessages = asyncHandler(async (req, res) => {
   if (!user.hasOwnProperty("messageBank")) {
     user.messageBank = [];
   }
-  //console.log(user);
+
   if (user) {
     res.json({ user });
   } else {

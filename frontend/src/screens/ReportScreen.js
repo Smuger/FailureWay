@@ -20,6 +20,7 @@ import UploadZone from "../components/UploadZone";
 import FormContainer from "../components/FormContainer";
 import { createServiceReport, listServices } from "../actions/serviceActions";
 import axios from "axios";
+import Resizer from "react-image-file-resizer";
 
 const ReportScreen = ({ location, history }) => {
   const [servicePicked, setServicePicked] = useState("");
@@ -42,20 +43,55 @@ const ReportScreen = ({ location, history }) => {
   const serviceUpdate = useSelector((state) => state.serviceUpdate);
   const sendingDataSuccess = serviceUpdate.success;
   const sendingDataError = serviceUpdate.error;
+  const sendingLoading = serviceUpdate.loading;
 
   useEffect(() => {
     dispatch(listServices());
-  }, [dispatch, location, history]);
+    if (sendingDataSuccess) {
+      if (servicePicked === "") {
+        history.push(`/services/${services[0]._id}`);
+      } else {
+        history.push(`/services/${servicePicked}`);
+      }
+    }
+  }, [dispatch, location, history, servicePicked, sendingDataSuccess]);
+
+  const resizeFile = (file) =>
+    new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        1024,
+        1024,
+        "JPEG",
+        100,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        "file"
+      );
+    });
+
+  const onChange = async (event) => {
+    try {
+      const file = event.target.files[0];
+      const image = await resizeFile(file);
+
+    } catch (err) {
+      console.err(err);
+    }
+  };
 
   const imageUploadHandler = async (picture) => {
-
     const file = picture[0];
 
-    const formData = new FormData();
-    formData.append("image", file);
-    setUploading(true);
-
     try {
+      const image = await resizeFile(file);
+
+      const formData = new FormData();
+      formData.append("image", image);
+
+      setUploading(true);
       const config = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -106,8 +142,6 @@ const ReportScreen = ({ location, history }) => {
           image,
         })
       );
-
-      history.push(`/services/${services[0]._id}`);
     } else {
       dispatch(
         createServiceReport(servicePicked, {
@@ -117,7 +151,6 @@ const ReportScreen = ({ location, history }) => {
           image,
         })
       );
-      history.push(`/services/${servicePicked}`);
     }
   };
 
@@ -196,7 +229,7 @@ const ReportScreen = ({ location, history }) => {
           </Row>
         </Form.Group>
 
-        {/* UPLOAD IMAGE TEST */}
+        {/* UPLOAD IMAGE */}
         <Form.Group controlId="image">
           <ImageUploader
             labelStyles={{ fontFamily: "Segoe UI" }}
@@ -217,7 +250,7 @@ const ReportScreen = ({ location, history }) => {
         <Form.Group controlId="comment">
           <Form.Label>Comment</Form.Label>
           <Form.Control
-          style={{minHeight: "90px"}}
+            style={{ minHeight: "90px" }}
             placeholder="Describe how this downtime affected you"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
@@ -225,7 +258,7 @@ const ReportScreen = ({ location, history }) => {
             rows={3}
           ></Form.Control>
         </Form.Group>
-
+        {sendingLoading && <Message variant="info">Please wait</Message>}
         <Button type="submit" variant="primary" disabled={uploading}>
           Submit
         </Button>

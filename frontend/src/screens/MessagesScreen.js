@@ -33,11 +33,6 @@ const MessagesScreen = ({ location, history }) => {
   const userMessages = useSelector((state) => state.userMessages);
   const { loading, error, messageBank } = userMessages;
 
-  console.log(messageBank);
-  if (messageBank) {
-    console.log(messageBank.user.messageBank);
-  }
-
   const dispatch = useDispatch();
   const submitHandler = () => {};
 
@@ -50,6 +45,9 @@ const MessagesScreen = ({ location, history }) => {
   useEffect(() => {
     dispatch(getUserMessages());
     scrollToBottom();
+  }, []);
+
+  useEffect(() => {
     if (messageBank) {
       if (
         JSON.stringify(message) !== JSON.stringify(messageBank.user.messageBank)
@@ -57,7 +55,7 @@ const MessagesScreen = ({ location, history }) => {
         setMessage(messageBank.user.messageBank);
       }
     }
-  }, []);
+  }, [messageBank, message, dispatch]);
 
   useInterval(() => {
     dispatch(getUserMessages());

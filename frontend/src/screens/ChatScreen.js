@@ -90,7 +90,7 @@ const ChatScreen = ({ location, history, match }) => {
 
   useInterval(() => {
     dispatch(getUserMessages());
-  }, 20000);
+  }, 5000);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -120,6 +120,9 @@ const ChatScreen = ({ location, history, match }) => {
 
   useEffect(() => {
     dispatch(getUserMessages());
+  }, []);
+
+  useEffect(() => {
 
     if (messageBank) {
       if (reciepientsInitials.letter === " ") {
@@ -135,7 +138,7 @@ const ChatScreen = ({ location, history, match }) => {
           id: 1,
         });
       }
-      console.log(reciepientsInitials);
+
       if (reciepientsName === "") {
         setReciepientsName(
           messageBank.user.messageBank.filter((value) => {
@@ -143,32 +146,32 @@ const ChatScreen = ({ location, history, match }) => {
           })[0].recipientName
         );
       }
-      console.log(reciepientsName);
-      if (messagesForThatUser.length === 0) {
-        let newMessages = messageBank.user.messageBank.filter((value) => {
-          return value.recipient === match.params.id;
-        })[0].messagesForThatUser;
 
-        console.log(newMessages);
-        console.log("___");
-        console.log(messagesForThatUser);
-        if (
-          JSON.stringify(newMessages) !== JSON.stringify(messagesForThatUser)
-        ) {
-          console.log("NOT SAME");
+      let newMessages = messageBank.user.messageBank.filter((value) => {
+        return value.recipient === match.params.id;
+      })[0].messagesForThatUser;
 
-          setMessagesForThatUser(newMessages);
-        }
+      if (JSON.stringify(newMessages) !== JSON.stringify(messagesForThatUser)) {
+
+
+        setMessagesForThatUser(newMessages);
       }
 
-      console.log(messagesForThatUser);
     }
     if (userInfo) {
       if (userID === "") {
         setUserID(userInfo._id);
       }
     }
-  }, [match, dispatch]);
+  }, [
+    match,
+    dispatch,
+    messageBank,
+    userInfo,
+    messagesForThatUser,
+    reciepientsInitials,
+    reciepientsName,
+  ]);
 
   return (
     <>
