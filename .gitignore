@@ -12,7 +12,7 @@ node_modules/
 # Static uploads
 # /uploads/
 
-bugs.js
+bugs.txt
 
 # production
 /frontend/build
