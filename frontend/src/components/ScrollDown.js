@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import { ChatItem, MessageBox } from "react-chat-elements";
 
-const ScrollDown = ({ messages, userInfo }) => {
+const ScrollDown = ({ messages, userID }) => {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -15,7 +15,7 @@ const ScrollDown = ({ messages, userInfo }) => {
     <div>
       {messages.map((conv) => (
         <Row key={conv._id}>
-          {conv.recipient === userInfo._id ? (
+          {conv.recipient === userID ? (
             <Col md={{ span: 5, offset: 1 }}>
               <MessageBox
                 position={"left"}

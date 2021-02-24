@@ -85,12 +85,15 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @route GET /api/users/messages
 // @access PRIVATE
 const getUserMessages = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-
+  const user = await User.findById(req.user._id)
+    .select({ messageBank: 1 })
+    .lean();
+  if (!user.hasOwnProperty("messageBank")) {
+    user.messageBank = [];
+  }
+  //console.log(user);
   if (user) {
-    res.json({
-      messageBank: user.messageBank,
-    });
+    res.json({ user });
   } else {
     res.status(404);
     throw new Error("User not found");

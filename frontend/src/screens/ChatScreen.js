@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 import { Row, Col, Container, Form, Button } from "react-bootstrap";
 import "react-chat-elements/dist/main.css";
@@ -35,6 +35,13 @@ const useInterval = (callback, delay) => {
 const ChatScreen = ({ location, history, match }) => {
   const [message, setMessage] = useState("");
   const [firstScreen, setFirstScreen] = useState(true);
+  const [reciepientsName, setReciepientsName] = useState("");
+  const [reciepientsInitials, setReciepientsInitials] = useState({
+    letter: " ",
+    id: 1,
+  });
+  const [messagesForThatUser, setMessagesForThatUser] = useState([]);
+  const [userID, setUserID] = useState("");
 
   // const [state, setState] = useState({ message: "", name: "" });
   // const [chat, setChat] = useState([]);
@@ -68,7 +75,7 @@ const ChatScreen = ({ location, history, match }) => {
   const { loading, success, messageBank } = userMessages;
 
   if (messageBank) {
-    let test = messageBank.messageBank.filter((value) => {
+    let test = messageBank.user.messageBank.filter((value) => {
       return value._id === match.params.id;
     });
   }
@@ -111,49 +118,72 @@ const ChatScreen = ({ location, history, match }) => {
     }
   };
 
-  const letters = {
-    letter: "sd",
-    id: 1,
-  };
-
-  if (messageBank) {
-    letters.letter = messageBank.messageBank
-      .filter((value) => {
-        return value.recipient === match.params.id;
-      })[0]
-      .recipientName.split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toLowerCase();
-  }
-
   useEffect(() => {
     dispatch(getUserMessages());
+
+    if (messageBank) {
+      if (reciepientsInitials.letter === " ") {
+        setReciepientsInitials({
+          letter: messageBank.user.messageBank
+            .filter((value) => {
+              return value.recipient === match.params.id;
+            })[0]
+            .recipientName.split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toLowerCase(),
+          id: 1,
+        });
+      }
+      console.log(reciepientsInitials);
+      if (reciepientsName === "") {
+        setReciepientsName(
+          messageBank.user.messageBank.filter((value) => {
+            return value.recipient === match.params.id;
+          })[0].recipientName
+        );
+      }
+      console.log(reciepientsName);
+      if (messagesForThatUser.length === 0) {
+        let newMessages = messageBank.user.messageBank.filter((value) => {
+          return value.recipient === match.params.id;
+        })[0].messagesForThatUser;
+
+        console.log(newMessages);
+        console.log("___");
+        console.log(messagesForThatUser);
+        if (
+          JSON.stringify(newMessages) !== JSON.stringify(messagesForThatUser)
+        ) {
+          console.log("NOT SAME");
+
+          setMessagesForThatUser(newMessages);
+        }
+      }
+
+      console.log(messagesForThatUser);
+    }
+    if (userInfo) {
+      if (userID === "") {
+        setUserID(userInfo._id);
+      }
+    }
   }, [match, dispatch]);
 
   return (
     <>
-      {messageBank && (
-        <Col md={{ span: 6, offset: 1 }}>
-          {loading ? (
-            <Loader />
-          ) : (
-            <Row>
-              <ChatItem
-                alt={"Account"}
-                title={`${
-                  messageBank.messageBank.filter((value) => {
-                    return value.recipient === match.params.id;
-                  })[0].recipientName
-                }`}
-                date={""}
-                unread={0}
-                letterItem={letters}
-              />
-            </Row>
-          )}
-        </Col>
-      )}
+      <Col md={{ span: 6 }}>
+        <Row>
+          <ChatItem
+            alt={"Account"}
+            title={reciepientsName}
+            date={""}
+            unread={0}
+            letterItem={reciepientsInitials}
+          />
+        </Row>
+      </Col>
+
       <Container
         style={{
           overflowY: "scroll",
@@ -162,16 +192,7 @@ const ChatScreen = ({ location, history, match }) => {
         }}
         id={"myDiv"}
       >
-        {messageBank && (
-          <ScrollDown
-            messages={
-              messageBank.messageBank.filter((value) => {
-                return value.recipient === match.params.id;
-              })[0].messagesForThatUser
-            }
-            userInfo={userInfo}
-          />
-        )}
+        <ScrollDown messages={messagesForThatUser} userID={userID} />
       </Container>
       <FormContainer>
         <Form onSubmit={handleSendMessage} style={{ marginTop: "1rem" }}>

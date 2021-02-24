@@ -67,7 +67,7 @@ const ProfileScreen = ({ location, history }) => {
 
         <Form onSubmit={submitHandler}>
           <Form.Group controlId="name">
-            <Form.Label>Name</Form.Label>
+            <Form.Label>Name (Require relogin)</Form.Label>
             <Form.Control
               type="name"
               placeholder="Enter Name"

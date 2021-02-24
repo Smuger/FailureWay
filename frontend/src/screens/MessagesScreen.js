@@ -27,11 +27,16 @@ const useInterval = (callback, delay) => {
 };
 
 const MessagesScreen = ({ location, history }) => {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState([]);
   const [firstScreen, setFirstScreen] = useState(true);
 
   const userMessages = useSelector((state) => state.userMessages);
   const { loading, error, messageBank } = userMessages;
+
+  console.log(messageBank);
+  if (messageBank) {
+    console.log(messageBank.user.messageBank);
+  }
 
   const dispatch = useDispatch();
   const submitHandler = () => {};
@@ -45,6 +50,13 @@ const MessagesScreen = ({ location, history }) => {
   useEffect(() => {
     dispatch(getUserMessages());
     scrollToBottom();
+    if (messageBank) {
+      if (
+        JSON.stringify(message) !== JSON.stringify(messageBank.user.messageBank)
+      ) {
+        setMessage(messageBank.user.messageBank);
+      }
+    }
   }, []);
 
   useInterval(() => {
@@ -54,54 +66,42 @@ const MessagesScreen = ({ location, history }) => {
   return (
     <>
       <Container style={{ overflowY: "scroll", height: "70vh" }}>
-        {loading ? (
-          <Loader />
-        ) : (
-          <Row>
-            {messageBank !== undefined &&
-              messageBank.messageBank.length === 0 &&
-              messageBank.messageBank.length === 0 && (
-                <h1>You have no messages</h1>
-              )}
-            {messageBank !== undefined ? (
-              messageBank.messageBank.map((conv) => (
-                <Col
-                  md={{ span: 6, offset: 3 }}
-                  style={{ backgroundColor: "#FFC100" }}
-                  key={conv._id}
-                >
-                  <Link
-                    to={`/messages/${conv.recipient}`}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <ChatItem
-                      alt={"Reactjs"}
-                      title={`${conv.recipientName}`}
-                      subtitle={
-                        conv.messagesForThatUser[
-                          conv.messagesForThatUser.length - 1
-                        ].message
-                      }
-                      date={new Date(conv.updatedAt)}
-                      unread={0}
-                      letterItem={{
-                        letter: conv.recipientName
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          .toLowerCase(),
-                        id: 1,
-                      }}
-                      onClick={() => setFirstScreen(false)}
-                    />
-                  </Link>
-                </Col>
-              ))
-            ) : (
-              <h1>You have no messages</h1>
-            )}
-          </Row>
-        )}
+        <Row>
+          {message.length === 0 && <h1>You have no messages</h1>}
+          {message.map((conv) => (
+            <Col
+              md={{ span: 6, offset: 3 }}
+              style={{ backgroundColor: "#FFC100" }}
+              key={conv._id}
+            >
+              <Link
+                to={`/messages/${conv.recipient}`}
+                style={{ textDecoration: "none" }}
+              >
+                <ChatItem
+                  alt={"Reactjs"}
+                  title={`${conv.recipientName}`}
+                  subtitle={
+                    conv.messagesForThatUser[
+                      conv.messagesForThatUser.length - 1
+                    ].message
+                  }
+                  date={new Date(conv.updatedAt)}
+                  unread={0}
+                  letterItem={{
+                    letter: conv.recipientName
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      .toLowerCase(),
+                    id: 1,
+                  }}
+                  onClick={() => setFirstScreen(false)}
+                />
+              </Link>
+            </Col>
+          ))}
+        </Row>
       </Container>
     </>
   );
