@@ -3,9 +3,7 @@ FailureWay is a downtime reporting platform built in MERN stack. Make better dec
 
 ## Table of contents
 * [Introduction](#Introduction)
-* [Action](#action)
-* [Reducer](#reducer)
-* [Use in component](#Use-in-component)
+* [Features](#Features)
 
 ## Introduction
 How to run this project?
