@@ -12,8 +12,11 @@ How to run this project?
 
 First you will need to create your own **.env** file with following variables:
 **NODE_ENV** = production
+
 **PORT** = 5000
+
 **MONGO_URI** = [here you will need to give your MongoDB Atlas url]
+
 **JWT_SECRET** = [Some secret. This can be anything "abcde123" is just fine]
 
 ```
