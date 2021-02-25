@@ -54,7 +54,17 @@ const ReportScreen = ({ location, history }) => {
         history.push(`/services/${servicePicked}`);
       }
     }
-  }, [dispatch, location, history, servicePicked, sendingDataSuccess]);
+    if (uploading) {
+      console.log("uploading");
+    }
+  }, [
+    dispatch,
+    location,
+    history,
+    servicePicked,
+    sendingDataSuccess,
+    uploading,
+  ]);
 
   const resizeFile = (file) =>
     new Promise((resolve) => {
@@ -76,58 +86,59 @@ const ReportScreen = ({ location, history }) => {
     try {
       const file = event.target.files[0];
       const image = await resizeFile(file);
-
     } catch (err) {
       console.err(err);
     }
   };
 
   const imageUploadHandler = async (picture) => {
+    setUploading(true);
     const file = picture[0];
 
-    try {
-      const image = await resizeFile(file);
+    if (file) {
+      try {
+        const image = await resizeFile(file);
 
-      const formData = new FormData();
-      formData.append("image", image);
+        const formData = new FormData();
+        formData.append("image", image);
 
-      setUploading(true);
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const { data } = await axios.post("/api/upload", formData, config);
-
-      setImage(data);
-      setUploading(false);
-    } catch (error) {
-      console.error(error);
-      setUploading(false);
+        const config = {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        };
+        const { data } = await axios.post("/api/upload", formData, config);
+        setUploading(false);
+        setImage(data);
+      } catch (error) {
+        setUploading(false);
+        console.error(error);
+      }
     }
+    setUploading(false);
   };
 
-  const uploadFileHandler = async (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("image", file);
-    setUploading(true);
+  // const uploadFileHandler = async (e) => {
+  //   setUploading(true);
+  //   const file = e.target.files[0];
+  //   const formData = new FormData();
+  //   formData.append("image", file);
 
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const { data } = await axios.post("/api/upload", formData, config);
+  //   try {
+  //     const config = {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     };
+  //     const { data } = await axios.post("/api/upload", formData, config);
 
-      setImage(data);
-      setUploading(false);
-    } catch (error) {
-      console.error(error);
-      setUploading(false);
-    }
-  };
+  //     setImage(data);
+  //     setUploading(false);
+  //   } catch (error) {
+  //     console.error(error);
+  //     setUploading(false);
+  //   }
+  // };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -231,15 +242,14 @@ const ReportScreen = ({ location, history }) => {
 
         {/* UPLOAD IMAGE */}
         <Form.Group controlId="image">
+          {uploading && <Loader />}
           <ImageUploader
             labelStyles={{ fontFamily: "Segoe UI" }}
             buttonStyles={{ background: "#1863e6" }}
-            label={
-              "Max file size: 5mb, accepted formats: jpg / jpge / gif / png"
-            }
+            label={"Max file size: 5mb, accepted formats: jpg / jpge / png"}
             withIcon={true}
             onChange={imageUploadHandler}
-            imgExtension={[".jpg", ".jpeg", ".png", ".gif"]}
+            imgExtension={[".jpg", ".jpeg", ".png"]}
             maxFileSize={5242880}
             singleImage={true}
             withPreview={true}

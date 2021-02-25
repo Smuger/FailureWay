@@ -8,7 +8,6 @@ import fs from "fs";
 // @route   GET /api/services
 // @access  Public
 const getServices = asyncHandler(async (req, res) => {
-
   let services = null;
   if (req.query.keyword !== "") {
     const keywordProvider = req.query.keyword
@@ -162,7 +161,7 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
       };
     }
 
-    service.data.unshift(newData);
+    service.data.push(newData);
 
     service.report.unshift(newReport);
 
