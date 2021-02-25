@@ -46,13 +46,19 @@ This are the already implemented features.
 This is the main page that shows every service.
 ![This gif shows how Dashboard works](Dashboard.gif)
 
+## 
+
 ### Report
 Report screen allowes to upload photos up to 5MB (In format: jpg, png) and a comment.
 ![This gif shows how Report works](Report.gif)
 
+## 
+
 ### Messenger
 Simple messaging tool
 ![This gif shows how Messenger works](Messenger.gif)
+
+## 
 
 ### Create Service [Admin]
 Admin tool adding new services
