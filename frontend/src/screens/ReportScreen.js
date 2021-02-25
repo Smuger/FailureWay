@@ -46,7 +46,6 @@ const ReportScreen = ({ location, history }) => {
   const sendingLoading = serviceUpdate.loading;
 
   useEffect(() => {
-    dispatch(listServices());
     if (sendingDataSuccess) {
       if (servicePicked === "") {
         history.push(`/services/${services[0]._id}`);
@@ -54,7 +53,6 @@ const ReportScreen = ({ location, history }) => {
         history.push(`/services/${servicePicked}`);
       }
     }
-
   }, [
     dispatch,
     location,
@@ -63,6 +61,10 @@ const ReportScreen = ({ location, history }) => {
     sendingDataSuccess,
     uploading,
   ]);
+
+  useEffect(() => {
+    dispatch(listServices());
+  }, []);
 
   const resizeFile = (file) =>
     new Promise((resolve) => {
