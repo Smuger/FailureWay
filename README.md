@@ -33,6 +33,11 @@ npm install
 ```
 This will install all dependencies for ExpressJS backend.
 
+```
+npm run dev
+```
+
+npm run dev 
 [Optional]
 If you have heroku setup: 
 ```
