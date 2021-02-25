@@ -1,8 +1,41 @@
 # FailureWay
 FailureWay is a downtime reporting platform built in MERN stack. Make better decisions using a data driven approach. 
 
-# Simple React JS Redux example
-**Note: functional component + Redux**
+## Table of contents
+* [Introduction](#Introduction)
+* [Action](#action)
+* [Reducer](#reducer)
+* [Use in component](#Use-in-component)
+
+## Introduction
+How to run this project?
+
+** First you will need to create your own .env file with following variables:
+NODE_ENV = production
+PORT = 5000
+MONGO_URI = [here you will need to give your MongoDB Atlas url]
+JWT_SECRET = [Some secret. This can be anything "abcde123" is just fine]
+
+```
+cd /frontend
+```
+```
+npm install
+```
+This will install all dependencies for the React frontend.
+```
+cd ..
+```
+```
+npm install
+```
+This will install all dependencies for ExpressJS backend.
+
+[Optional]
+If you have heroku setup: 
+```
+git push heroku master 
+```
 
 ![This gif shows how Dashboard works](Dashboard.gif)
 
@@ -13,11 +46,7 @@ FailureWay is a downtime reporting platform built in MERN stack. Make better dec
 ![This gif shows how Create Service works](Create_Service.gif)
 
 
-## Table of contents
-* [Store](#store)
-* [Action](#action)
-* [Reducer](#reducer)
-* [Use in component](#Use-in-component)
+
 
 ## How to run this example?
 Just pull and run command:
@@ -29,16 +58,7 @@ and
 npm start
 ```
 
-## Store
-Just one object that is the source of truth
-```
-import { createStore } from "redux";
-import reducer from "../reducers/reducer";
 
-const store = createStore(reducer);
-
-export default store;
-```
 
 ## Action
 Here you just describe WHAT are you storing.
@@ -96,3 +116,6 @@ store.dispatch(actions.bugAdded(bugDescription));
 // Ask store for current data
 store.getState()
 ```
+
+# Simple React JS Redux example
+**Note: functional component + Redux**
