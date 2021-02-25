@@ -4,7 +4,7 @@ FailureWay is a downtime reporting platform built in MERN stack. Make better dec
 # Simple React JS Redux example
 **Note: functional component + Redux**
 
-##![HowItWorks](gif.gif)
+![HowItWorks](Dashboard.gif)
 
 ## Table of contents
 * [Store](#store)
