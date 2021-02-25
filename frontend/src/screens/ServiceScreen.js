@@ -198,7 +198,11 @@ const ServiceScreen = ({ history, match }) => {
             </Form.Group>
           </Col>
           <Col md={12}>
-            <Chart service={service} chartPicked={chartPicked} />
+            <Chart
+              service={service}
+              chartPicked={chartPicked}
+              inDashboard={false}
+            />
           </Col>
 
           <Col md={6}>

@@ -41,7 +41,7 @@ const HomeScreen = ({ history, match }) => {
         <Row>
           {services.map((service) => (
             <Col key={service._id} sm={6} md={6} lg={6} xl={6}>
-              <Chart service={service} />
+              <Chart service={service} inDashboard={true} />
             </Col>
           ))}
         </Row>

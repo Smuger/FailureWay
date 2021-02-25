@@ -54,9 +54,7 @@ const ReportScreen = ({ location, history }) => {
         history.push(`/services/${servicePicked}`);
       }
     }
-    if (uploading) {
-      console.log("uploading");
-    }
+
   }, [
     dispatch,
     location,

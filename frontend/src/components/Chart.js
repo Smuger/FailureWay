@@ -21,7 +21,7 @@ import RadialBarChartComponent from "./Charts/RadialBarChartComponent";
 import ScatterChartComponent from "./Charts/ScatterChartComponent";
 import TreeMapComponent from "./Charts/TreeMapComponent";
 
-const Chart = ({ service, chartPicked }) => {
+const Chart = ({ service, chartPicked, inDashboard }) => {
   if (!chartPicked) {
     chartPicked = "BarChart";
   }
@@ -29,25 +29,39 @@ const Chart = ({ service, chartPicked }) => {
   const choosenChart = () => {
     switch (chartPicked) {
       case "BarChart":
-        return <BarChartComponent service={service} />;
+        return (
+          <BarChartComponent service={service} inDashboard={inDashboard} />
+        );
         break;
       case "AreaChart":
-        return <AreaChartComponent service={service} />;
+        return (
+          <AreaChartComponent service={service} inDashboard={inDashboard} />
+        );
         break;
       case "LineChart":
-        return <LineChartComponent service={service} />;
+        return (
+          <LineChartComponent service={service} inDashboard={inDashboard} />
+        );
         break;
       case "ComposedChart":
-        return <ComposedChartComponent service={service} />;
+        return (
+          <ComposedChartComponent service={service} inDashboard={inDashboard} />
+        );
         break;
       case "ScatterChart":
-        return <ScatterChartComponent service={service} />;
+        return (
+          <ScatterChartComponent service={service} inDashboard={inDashboard} />
+        );
         break;
       case "PieChart":
-        return <PieChartComponent service={service} />;
+        return (
+          <PieChartComponent service={service} inDashboard={inDashboard} />
+        );
         break;
       case "RadarChart":
-        return <RadarChartComponent service={service} />;
+        return (
+          <RadarChartComponent service={service} inDashboard={inDashboard} />
+        );
         break;
       case "RadialBarChart":
         return <RadialBarChartComponent service={service} />;
@@ -57,7 +71,6 @@ const Chart = ({ service, chartPicked }) => {
         break;
     }
   };
-
   return (
     <Card className="my-3 p-3 rounded">
       {choosenChart()}
@@ -65,9 +78,14 @@ const Chart = ({ service, chartPicked }) => {
         <Card.Title as="div">
           <strong>{service.provider}</strong>
         </Card.Title>
-        <Link to={`/services/${service._id}`}>
+
+        {inDashboard ? (
+          <Link to={`/services/${service._id}`}>
+            <Card.Text as="h3">{service.name}</Card.Text>
+          </Link>
+        ) : (
           <Card.Text as="h3">{service.name}</Card.Text>
-        </Link>
+        )}
       </Card.Body>
     </Card>
   );
