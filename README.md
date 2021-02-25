@@ -1,7 +1,7 @@
 # FailureWay
 FailureWay is a downtime reporting platform built in MERN stack. Make better decisions using a data driven approach.
 
-### Working DEMO: www.failureway.herokuapp.com
+### Working DEMO: https://failureway.herokuapp.com/login
 
 ## Table of contents
 * [Introduction](#Introduction)
