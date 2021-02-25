@@ -10,11 +10,11 @@ FailureWay is a downtime reporting platform built in MERN stack. Make better dec
 ## Introduction
 How to run this project?
 
-** First you will need to create your own .env file with following variables:
-NODE_ENV = production
-PORT = 5000
-MONGO_URI = [here you will need to give your MongoDB Atlas url]
-JWT_SECRET = [Some secret. This can be anything "abcde123" is just fine]
+First you will need to create your own **.env** file with following variables:
+**NODE_ENV** = production
+**PORT** = 5000
+**MONGO_URI** = [here you will need to give your MongoDB Atlas url]
+**JWT_SECRET** = [Some secret. This can be anything "abcde123" is just fine]
 
 ```
 cd /frontend
@@ -37,39 +37,34 @@ If you have heroku setup:
 git push heroku master 
 ```
 
+## Features
+This are the already implemented features.
+
+### Dashboard
 ![This gif shows how Dashboard works](Dashboard.gif)
 
+### Report
 ![This gif shows how Report works](Report.gif)
 
+### Messenger
 ![This gif shows how Messenger works](Messenger.gif)
 
+### Create Service [Admin]
 ![This gif shows how Create Service works](Create_Service.gif)
 
 
 
 
-## How to run this example?
-Just pull and run command:
-```
-npm install
-```
-and
-```
-npm start
-```
+
+
+
 
 
 
 ## Action
 Here you just describe WHAT are you storing.
 
-### Types
-This is your bank of constants for all possible actions
-```
-export const BUG_ADDED = "bugAdded";
-export const BUG_REMOVED = "bugRemoved";
-export const BUG_RESOLVED = "bugResolved";
-```
+
 
 ### Actions
 Describe what would you like to store
