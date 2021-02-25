@@ -10,6 +10,9 @@ FailureWay is a downtime reporting platform built in MERN stack. Make better dec
 
 ![This gif shows how Messenger works](Messenger.gif)
 
+![This gif shows how Create Service works](Create Service.gif)
+
+
 ## Table of contents
 * [Store](#store)
 * [Action](#action)
