@@ -13,6 +13,8 @@ import {
   USER_REGISTER_FAIL,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
+  USER_SEND_MESSAGE_FAIL,
+  USER_SEND_MESSAGE_FLUSH,
   USER_SEND_MESSAGE_REQUEST,
   USER_SEND_MESSAGE_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
@@ -229,12 +231,17 @@ export const postUserMessage = (messageToSend) => async (
       payload: data,
     });
 
-    dispatch(getUserMessages(userInfo._id));
+    dispatch({
+      type: USER_SEND_MESSAGE_FLUSH,
+      payload: data,
+    });
+
+    // dispatch(getUserMessages(userInfo._id));
 
     localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     dispatch({
-      type: USER_REGISTER_FAIL,
+      type: USER_SEND_MESSAGE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

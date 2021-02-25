@@ -21,7 +21,7 @@ const getServices = asyncHandler(async (req, res) => {
     services = await Service.find({ ...keywordProvider }).lean();
   } else {
     services = await Service.find()
-      .select({ _id: 1, name: 1, provider: 1, data: 1 })
+      .select({ _id: 1, name: 1, provider: 1, data: 1, nuOfReports: 1 })
       .lean();
   }
 
@@ -172,6 +172,8 @@ const updateServiceDowntime = asyncHandler(async (req, res) => {
 
     let serviceReportLastPosition = service.report.length - 1;
 
+    service.nuOfReports = service.nuOfReports + 1;
+
     try {
       await service.save();
       await reportingUser.save();
@@ -200,6 +202,7 @@ const createService = asyncHandler(async (req, res) => {
     data: [],
     report: [],
     provider: provider,
+    nuOfReports: 0,
   });
 
   try {

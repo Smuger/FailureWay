@@ -34,7 +34,7 @@ const authUser = asyncHandler(async (req, res) => {
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  const userExist = await User.findOne({ email });
+  const userExist = await User.findOne({ email }).lean();
 
   if (userExist) {
     res.status(400);
@@ -100,7 +100,7 @@ const getUserMessages = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Register a new user
+// @desc Post new message
 // @route POST /api/users
 // @access Public
 const postUserMessage = asyncHandler(async (req, res) => {
@@ -134,11 +134,17 @@ const postUserMessage = asyncHandler(async (req, res) => {
   };
 
   updateMessageDBs(user, recipient, message, conversations, messageArray);
+
   updateMessageDBs(user2, req.user._id, message, conversations2, messageArray);
 
   try {
     await user.save();
-    await user2.save();
+
+    if (recipient.str === req.user._id.str) {
+    } else {
+      await user2.save();
+    }
+
     res.status(201).json({ message: "Message sent" });
   } catch (error) {
     console.error("Unable to send message: " + error);
@@ -167,6 +173,9 @@ const updateMessageDBs = (
       user.messageBank[conversationPosition].messagesForThatUser.push(
         messageArray
       );
+      let updatedMessageBank = user.messageBank[conversationPosition];
+      user.messageBank.splice(conversationPosition, 1);
+      user.messageBank.unshift(updatedMessageBank);
     } else {
       user.messageBank.unshift(conversations);
     }

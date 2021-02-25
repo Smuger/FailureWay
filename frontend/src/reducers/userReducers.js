@@ -14,6 +14,7 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_SEND_MESSAGE_FAIL,
+  USER_SEND_MESSAGE_FLUSH,
   USER_SEND_MESSAGE_REQUEST,
   USER_SEND_MESSAGE_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
@@ -65,11 +66,13 @@ export const userMessagesReducer = (state = {}, action) => {
 export const userSendMessageReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_SEND_MESSAGE_REQUEST:
-      return { loading: true, success: false };
+      return { loading: true };
     case USER_SEND_MESSAGE_SUCCESS:
       return { loading: false, success: true, userInfo: action.payload };
     case USER_SEND_MESSAGE_FAIL:
-      return { loading: false, error: action.payload, success: false };
+      return { loading: false, error: action.payload };
+    case USER_SEND_MESSAGE_FLUSH:
+      return {};
     default:
       return state;
   }

@@ -32,8 +32,9 @@ const RegisterScreen = ({ location, history }) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setMessage("Passwords do not match");
+    } else {
+      dispatch(register(name, email.toLowerCase(), password));
     }
-    dispatch(register(name, email.toLowerCase(), password));
   };
 
   return (

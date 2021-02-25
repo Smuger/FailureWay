@@ -49,6 +49,7 @@ const ServiceScreen = ({ history, match }) => {
 
   const userSendMessage = useSelector((state) => state.userSendMessage);
   const sendMessageLoading = userSendMessage.loading;
+  const sendMessageSuccess = userSendMessage.success;
 
   const wasSLABreached = () => {
     const breachFound = {
@@ -139,8 +140,6 @@ const ServiceScreen = ({ history, match }) => {
     e.preventDefault();
     if (message.replace(/\s/g, "") !== "") {
       dispatch(postUserMessage(messageToSend));
-
-      history.push("/messages");
     }
   };
 
@@ -149,7 +148,6 @@ const ServiceScreen = ({ history, match }) => {
       if (!e.shiftKey) {
         if (message.replace(/\s/g, "") !== "") {
           dispatch(postUserMessage(messageToSend));
-          history.push("/messages");
         }
       }
     }
@@ -162,10 +160,15 @@ const ServiceScreen = ({ history, match }) => {
     img = base64Flag + imageStr;
     return img;
   };
-
   useEffect(() => {
     dispatch(listServiceDetails(match.params.id));
-  }, [match, dispatch, test]);
+  }, []);
+
+  useEffect(() => {
+    if (sendMessageSuccess) {
+      history.push("/messages");
+    }
+  }, [match, dispatch, test, sendMessageSuccess]);
 
   return (
     <>
@@ -263,7 +266,7 @@ const ServiceScreen = ({ history, match }) => {
               <ListGroup.Item>
                 {/** SECOND SERVICE MAP */}
                 {service.report.map((review) => (
-                  <Review review={review} />
+                  <Review review={review} key={review._id} />
                 ))}
               </ListGroup.Item>
             </ListGroup>

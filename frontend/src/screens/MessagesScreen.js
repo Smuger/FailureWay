@@ -64,8 +64,12 @@ const MessagesScreen = ({ location, history }) => {
   return (
     <>
       <Container style={{ overflowY: "scroll", height: "70vh" }}>
+        {loading && message.length === 0 ? (
+          <Loader />
+        ) : (
+          <>{message.length === 0 && <h1>You have no messages</h1>}</>
+        )}
         <Row>
-          {message.length === 0 && <h1>You have no messages</h1>}
           {message.map((conv) => (
             <Col
               md={{ span: 6, offset: 3 }}

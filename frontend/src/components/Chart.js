@@ -80,9 +80,14 @@ const Chart = ({ service, chartPicked, inDashboard }) => {
         </Card.Title>
 
         {inDashboard ? (
-          <Link to={`/services/${service._id}`}>
-            <Card.Text as="h3">{service.name}</Card.Text>
-          </Link>
+          <>
+            <Link to={`/services/${service._id}`}>
+              <Card.Text as="h3">{service.name}</Card.Text>
+            </Link>
+            <Card.Text as="p">
+              No. of reports: <strong>{service.nuOfReports}</strong>
+            </Card.Text>
+          </>
         ) : (
           <Card.Text as="h3">{service.name}</Card.Text>
         )}
