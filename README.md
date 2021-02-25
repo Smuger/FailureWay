@@ -10,7 +10,7 @@ FailureWay is a downtime reporting platform built in MERN stack. Make better dec
 ## Introduction
 How to run this project?
 
-First you will need to create your own **.env** file (just an empty file with .env extension) with following variables:
+First you will need to create your own **.env** file (just an empty file in the root directory with .env extension) with following variables:
 
 **NODE_ENV** = production
 
