@@ -10,7 +10,8 @@ FailureWay is a downtime reporting platform built in MERN stack. Make better dec
 ## Introduction
 How to run this project?
 
-First you will need to create your own **.env** file with following variables:
+First you will need to create your own **.env** file (just an empty file with .env extension) with following variables:
+
 **NODE_ENV** = production
 
 **PORT** = 5000
@@ -44,76 +45,17 @@ git push heroku master
 This are the already implemented features.
 
 ### Dashboard
+This is the main page that shows every service.
 ![This gif shows how Dashboard works](Dashboard.gif)
 
 ### Report
+Report screen allowes to upload photos up to 5MB (In format: jpg, png) and a comment.
 ![This gif shows how Report works](Report.gif)
 
 ### Messenger
+Simple messaging tool
 ![This gif shows how Messenger works](Messenger.gif)
 
 ### Create Service [Admin]
+Admin tool adding new services
 ![This gif shows how Create Service works](Create_Service.gif)
-
-
-
-
-
-
-
-
-
-
-## Action
-Here you just describe WHAT are you storing.
-
-
-
-### Actions
-Describe what would you like to store
-```
-export const bugAdded = (description) => ({
-
-   type: actions.BUG_ADDED,
-   payload: {
-     description,
-   },
-   
-});
-```
-
-## Reducer
-This is the place where you actually edit store state
-```
-import * as actions from "../actions/actionTypes";
-
-export default function reducer(state = [], action) {
-
-switch (action.type) {
-
-   case actions.BUG_ADDED:
-     return state; // Edited in some way
-   case actions.BUG_REMOVED:
-     return state; // Edited in some way
-   case actions.BUG_RESOLVED:
-     return state; // Edited in some way
-   default:
-     return state; // return clean state just in case
-}
-```
-
-## Use in component
-First import STORE and ACTIONS
-```
-import * as actions from "../actions/actions";
-import store from "../store/store";
-
-// Ask store to edit data
-store.dispatch(actions.bugAdded(bugDescription));
-
-// Ask store for current data
-store.getState()
-```
-
-# Simple React JS Redux example
-**Note: functional component + Redux**
