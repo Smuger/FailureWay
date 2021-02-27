@@ -105,23 +105,6 @@ export const createServiceReport = (serviceId, report) => async (
       payload: message,
     });
   }
-  try {
-    dispatch({ type: SERVICE_DETAILS_REQUEST });
-    const { data } = await axios.get(`/api/services/${serviceId}`);
-
-    dispatch({
-      type: SERVICE_DETAILS_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: SERVICE_DETAILS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
 };
 export const createService = (newService) => async (dispatch, getState) => {
   try {

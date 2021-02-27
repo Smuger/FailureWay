@@ -236,7 +236,9 @@ export const postUserMessage = (messageToSend) => async (
       payload: data,
     });
 
-    // dispatch(getUserMessages(userInfo._id));
+    dispatch({
+      type: USER_MESSAGES_REQUEST,
+    });
 
     localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {

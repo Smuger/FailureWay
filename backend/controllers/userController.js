@@ -140,7 +140,7 @@ const postUserMessage = asyncHandler(async (req, res) => {
   try {
     await user.save();
 
-    if (recipient.str === req.user._id.str) {
+    if (recipient.str !== req.user._id.str) {
     } else {
       await user2.save();
     }

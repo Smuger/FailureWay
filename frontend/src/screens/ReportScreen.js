@@ -34,7 +34,7 @@ const ReportScreen = ({ location, history }) => {
   const [uploading, setUploading] = useState(false);
 
   const [message, setMessage] = useState("");
-
+  const [commentMessage, setCommentMessage] = useState("");
   const dispatch = useDispatch();
 
   const serviceList = useSelector((state) => state.serviceList);
@@ -54,12 +54,8 @@ const ReportScreen = ({ location, history }) => {
       }
     }
   }, [
-    dispatch,
-    location,
-    history,
     servicePicked,
     sendingDataSuccess,
-    uploading,
   ]);
 
   useEffect(() => {
@@ -120,26 +116,30 @@ const ReportScreen = ({ location, history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-
-    // Turn on after testing
-    if (servicePicked === "") {
-      dispatch(
-        createServiceReport(services[0]._id, {
-          severity,
-          downtime,
-          comment,
-          image,
-        })
-      );
+    if (comment.replace(/\s/g, "") === "") {
+      setCommentMessage("Comment is required");
     } else {
-      dispatch(
-        createServiceReport(servicePicked, {
-          severity,
-          downtime,
-          comment,
-          image,
-        })
-      );
+      setCommentMessage("");
+      // Turn on after testing
+      if (servicePicked === "") {
+        dispatch(
+          createServiceReport(services[0]._id, {
+            severity,
+            downtime,
+            comment,
+            image,
+          })
+        );
+      } else {
+        dispatch(
+          createServiceReport(servicePicked, {
+            severity,
+            downtime,
+            comment,
+            image,
+          })
+        );
+      }
     }
   };
 
@@ -246,6 +246,7 @@ const ReportScreen = ({ location, history }) => {
             rows={3}
           ></Form.Control>
         </Form.Group>
+        {commentMessage && <Message variant="danger">{commentMessage}</Message>}
         {sendingLoading && <Message variant="info">Please wait</Message>}
         <Button type="submit" variant="primary" disabled={uploading}>
           Submit
