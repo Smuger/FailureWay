@@ -1,5 +1,5 @@
 # FailureWay
-FailureWay is a downtime reporting platform built in MERN stack. Make better decisions using a data driven approach.
+FailureWay is a downtime reporting platform built in MERN stack set for Heroku deployment. Make better decisions using a data driven approach.
 
 ### Working DEMO: https://failureway.herokuapp.com/login
 
@@ -39,7 +39,6 @@ This will install all dependencies for ExpressJS backend.
 npm run dev
 ```
 
-npm run dev 
 [Optional]
 If you have heroku setup: 
 ```
