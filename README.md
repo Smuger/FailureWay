@@ -2,6 +2,7 @@
 FailureWay is a downtime reporting platform built in MERN stack set for Heroku deployment. Make better decisions using a data driven approach.
 
 EMAIL: dummy@account.com
+
 PASSWORD: 123456
 
 ### Working DEMO: https://failureway.herokuapp.com/login
