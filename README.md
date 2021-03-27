@@ -5,8 +5,9 @@ EMAIL: dummy@account.com
 
 PASSWORD: 123456
 
-### Working DEMO: https://failureway.herokuapp.com/login
-[Please allow up to one minute for initial page load. Free hosting comes at a price.]
+### Working DEMO: 
+Europe: https://europe-failureway.herokuapp.com/login
+USA: https://failureway.herokuapp.com/login
 
 ## Table of contents
 * [Introduction](#Introduction)
