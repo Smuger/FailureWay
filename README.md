@@ -71,6 +71,7 @@ Report screen allowes to upload photos up to 5MB (In format: jpg, png) and a com
 
 ### Messenger
 Simple messaging tool
+
 ![This gif shows how Messenger works](Messenger.gif)
 
 ## 
